@@ -1,0 +1,51 @@
+version: '3.2'
+services:
+  homeassistant:
+    container_name: hass
+    image: ghcr.io/home-assistant/home-assistant:stable
+    volumes:
+      - ./homeassistant/config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=Europe/Warsaw
+    healthcheck:
+      test: 'curl -m 90 -sLf http://localhost:8123 || date >> /config/healthcheck' #| pkill -9 python3'
+      interval: 90s
+      timeout: 60s
+      retries: 3
+    network_mode: host
+    restart: always
+    depends_on:
+      - mariadb
+      - mosquitto
+
+  mariadb:
+    image: linuxserver/mariadb
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: ha_db
+      MYSQL_USER: homeassistant
+      MYSQL_PASSWORD: "${HA_MYSQL_PASSWORD}"
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - ./mariadb:/config
+    ports:
+      - "3306:3306"
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - "./mosquitto/config:/mosquitto/config"
+      - "./mosquitto/data:/mosquitto/data"
+      - "./mosquitto/log:/mosquitto/log"
+    environment:
+      - TZ=Europe/Madrid
+    user: "${PUID}:${PGID}"
