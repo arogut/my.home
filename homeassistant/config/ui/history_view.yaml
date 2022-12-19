@@ -1,0 +1,69 @@
+# lovelace_gen
+
+type: custom:grid-layout
+title: History
+layout:
+  #default
+  margin: 0
+  grid-gap: var(--custom-layout-card-padding)
+  grid-template-columns: repeat(4, 1fr) 0
+  grid-template-rows: 0 repeat(2, fit-content(100%))
+  grid-template-areas: |
+    "sidebar  .            .       .       ."
+    "sidebar  living_room  office  bedroom ."
+    "sidebar  media        other   home    ."
+  mediaquery:
+    #phone
+    "(max-width: 800px)":
+      grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+      grid-template-columns: 0 repeat(2, 1fr) 0
+      grid-template-rows: 0 repeat(5, fit-content(100%)) 0fr
+      grid-template-areas: |
+        ".  .            .        ."
+        ".  sidebar      sidebar  ."
+        ".  living_room  bedroom  ."
+        ".  office       other    ."
+        ".  media        home     ."
+        ".  .            .        ."
+    #portrait
+    "(max-width: 1200px)":
+      grid-gap: var(--custom-layout-card-padding)
+      grid-template-columns: repeat(3, 1fr) 0
+      grid-template-rows: 0 repeat(3, fit-content(100%)) 0fr
+      grid-template-areas: |
+        "sidebar  .            .       ."
+        "sidebar  living_room  bedroom ."
+        "sidebar  office       other   ."
+        "sidebar  media        home    ."
+        "sidebar  .            .       ."
+cards:
+
+  #extra_styles fix, do not remove
+  #also warn if theme is not set
+
+  - type: custom:button-card
+    view_layout:
+      grid-area: 1 / 2 / 2 / 5
+    name: SET THEME TO "tablet" IN PROFILE
+    tap_action:
+      action: navigate
+      navigation_path: /profile
+    styles:
+      card:
+        - display: >
+            [[[
+              return hass.themes.theme === 'tablet'
+                  ? 'none'
+                  : 'initial';
+            ]]]
+      name:
+        - z-index: 1
+        - overflow: visible
+        - color: red
+        - font-weight: bolder
+        - font-size: xxx-large
+        - background: yellow
+
+  - !include
+    - components/sidebar_component.yaml
+    - option_selected: Historia

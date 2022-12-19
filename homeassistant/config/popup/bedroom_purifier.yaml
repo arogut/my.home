@@ -1,0 +1,121 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: Oczyszczacz
+    card_mod:
+      style:
+        #popup header
+        .: |
+          div.content {
+            margin-top: -24px !important;
+          }
+    content:
+      type: vertical-stack
+      cards:
+        - type: entities
+          card_mod:
+            class: content
+            style: |
+              #states {
+                padding-top: 1.2em;
+                padding-bottom: 0em;
+              }
+          entities:
+
+            - type: custom:more-info-card
+              entity: fan.oczyszczacz
+              card_mod:
+                style:
+                  # hide everything but ha-select
+                  $: |
+                    h1 {
+                      display: none !important;
+                    }
+                  .: |
+                    h1 {
+                      display: none !important;
+                    }
+                    .card-content {
+                      padding: 0.3em 0 0.6em 0.6em;
+                    }
+                  state-card-climate$: |
+                    div {
+                      display: none !important;
+                    }
+                  more-info-climate$:
+                    .: |
+                      .container-temperature, .container-hvac_modes {
+                        display: none;
+                      }
+                    ha-select:
+                      $:
+                        # no icon so reduce label inset
+                        .: |
+                          .mdc-floating-label {
+                            inset-inline-start: 4px !important;
+                          }
+                        # fix transparent menu background color
+                        mwc-menu$: |
+                          mwc-list {
+                            background: var(--card-background-color);
+                          }
+
+            - entity: sensor.oczyszczacz_temperature
+              name: Temperatura
+            - entity: sensor.oczyszczacz_humidity
+              name: Wilgotność
+
+        - type: custom:apexcharts-card
+          layout: minimal
+          locale: pl
+          graph_span: 8h
+          show:
+            loading: false
+          apex_config:
+            chart:
+              height: 100px
+              offsetY: -20px
+            tooltip:
+              style:
+                fontSize: 14px
+              x:
+                format: dddd HH:mm
+            xaxis:
+              crosshairs:
+                show: false
+            fill:
+              type: gradient
+              gradient:
+                type: vertical
+                opacityFrom: 0.8
+                opacityTo: 0
+                stops:
+                  - 0
+                  - 99
+                  - 100
+            stroke:
+              width: 3
+            plotOptions:
+              area:
+                fillTo: end
+            grid:
+              padding:
+                top: -15
+          series:
+            - entity: sensor.oczyszczacz_temperature
+              name: Temperatura
+              color: green
+              type: area
+              fill_raw: last
+              group_by:
+                func: avg
+                duration: 1h
+            - entity: sensor.oczyszczacz_humidity
+              name: Wilgotność
+              color: '#385581'
+              type: area
+              fill_raw: last
+              group_by:
+                func: avg
+                duration: 1h

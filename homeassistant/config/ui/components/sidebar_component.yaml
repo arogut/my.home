@@ -1,0 +1,29 @@
+# lovelace_gen
+
+type: vertical-stack
+view_layout:
+  grid-area: sidebar
+cards:
+
+  - type: custom:button-card
+    entity: sensor.template_sidebar
+    template: sidebar
+
+  - type: vertical-stack
+    view_layout:
+      grid-area: sidebar
+    style: |
+      #root {
+        margin: 0 2.5vw 0 3.3vw;
+      }
+    cards:
+
+      - type: custom:button-card
+        name: Ustawienia
+        icon: mdi:cog
+        tap_action:
+          action: navigate
+          navigation_path: /config/dashboard
+        template: sidebar-button
+        variables:
+          is_selected: false

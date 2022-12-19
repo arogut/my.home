@@ -1,0 +1,2 @@
+shell_command:
+  purge_log: truncate -s 0 /config/home-assistant.log

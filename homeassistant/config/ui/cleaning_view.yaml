@@ -1,0 +1,111 @@
+type: custom:grid-layout
+title: Cleaning
+layout:
+  #default
+  margin: 0
+  grid-gap: var(--custom-layout-card-padding)
+  grid-template-columns: repeat(4, 1fr) 0
+  grid-template-rows: 0 min-content auto
+  grid-template-areas: |
+    "sidebar  .        .    .   ."
+    "sidebar  buttons  map  map ."
+    "sidebar  .        .    .   ."
+  mediaquery:
+    #phone
+    "(max-width: 800px)":
+      grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+      grid-template-columns: 0 repeat(2, 1fr) 0
+      grid-template-rows: 0 repeat(3, fit-content(100%)) 0fr
+      grid-template-areas: |
+        ".  .        .        ."
+        ".  sidebar  sidebar  ."
+        ".  buttons  buttons  ."
+        ".  map      map      ."
+        ".  .        .        ."
+    #portrait
+    "(max-width: 1200px)":
+      grid-gap: var(--custom-layout-card-padding)
+      grid-template-columns: repeat(3, 1fr) 0
+      grid-template-rows: 0 repeat(3, fit-content(100%)) 0fr
+      grid-template-areas: |
+        "sidebar  .        .    ."
+        "sidebar  buttons  map  ."
+        "sidebar  .        .    ."
+cards:
+
+  #extra_styles fix, do not remove
+  #also warn if theme is not set
+
+  - type: custom:button-card
+    view_layout:
+      grid-area: 1 / 2 / 2 / 5
+    name: SET THEME TO "tablet" IN PROFILE
+    tap_action:
+      action: navigate
+      navigation_path: /profile
+    styles:
+      card:
+        - display: >
+            [[[
+              return hass.themes.theme === 'tablet'
+                  ? 'none'
+                  : 'initial';
+            ]]]
+      name:
+        - z-index: 1
+        - overflow: visible
+        - color: red
+        - font-weight: bolder
+        - font-size: xxx-large
+        - background: yellow
+
+  - !include
+    - components/sidebar_component.yaml
+    - option_selected: Sprzątanie
+
+  - type: vertical-stack
+    view_layout:
+      grid-area: buttons
+    cards:
+
+      - type: picture
+        image: /local/img/mi-robot-vacuum-mop-2-pro.png
+
+      - type: markdown
+        content: >
+          {{ sensor.mi_6345104688_message.state }}
+
+      - type: horizontal-stack
+        cards:
+
+          - type: custom:button-card
+            icon: mdi:bell
+            tap_action:
+              action: call-service
+              service: vacuum.locate
+              service_data:
+                entity_id: vacuum.ijai_v3_e461_robot_cleaner
+
+          - type: custom:button-card
+            icon: mdi:home-import-outline
+            tap_action:
+              action: call-service
+              service: vacuum.return_to_base
+              service_data:
+                entity_id: vacuum.ijai_v3_e461_robot_cleaner
+
+          - type: custom:button-card
+            icon: mdi:play
+            tap_action:
+              action: call-service
+              service: vacuum.start
+              service_data:
+                entity_id: vacuum.ijai_v3_e461_robot_cleaner
+
+          - type: custom:button-card
+            icon: mdi:pause
+            tap_action:
+              action: call-service
+              service: vacuum.pause
+              service_data:
+                entity_id: vacuum.ijai_v3_e461_robot_cleaner

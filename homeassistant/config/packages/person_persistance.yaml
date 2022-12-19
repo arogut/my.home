@@ -1,0 +1,53 @@
+homeassistant:
+  customize:
+    person.matte:
+      entity_picture: /local/adrian.png
+    person.sanja:
+      entity_picture: /local/pati.png
+
+#person:
+#  - name: Adrian
+#    id: adrian
+#    device_trackers:
+#      - device_tracker.oneplus7pro
+#
+#  - name: Pati
+#    id: pati
+#    device_trackers:
+#      - device_tracker.58_20_59_b9_83_0c
+
+mqtt:
+  sensor:
+    - name: adrian_last_changed
+      state_topic: homeassistant/persistence/adrian
+      value_template: >
+        {{ value | replace(' ', 'T') }}
+
+    - name: pati_last_changed
+      state_topic: homeassistant/persistence/pati
+      value_template: >
+        {{ value | replace(' ', 'T') }}
+
+automation:
+  - alias: person_home
+    id: '8423590985012'
+    mode: parallel
+    trigger:
+      platform: state
+      entity_id:
+        - person.adrian
+        - person.pati
+      from:
+        - home
+        - not_home
+      to:
+        - home
+        - not_home
+    action:
+      service: mqtt.publish
+      data:
+        topic_template: >
+          homeassistant/persistence/{{ trigger.to_state.name | lower }}
+        payload_template: >
+          {{ now() }}
+        retain: true

@@ -1,0 +1,38 @@
+# https://github.com/ualex73/monitor_docker
+monitor_docker:
+  - name: Docker
+    containers:
+      - watchtower
+      - hass
+      - mosquitto
+    monitored_conditions: allinone
+    scan_interval: 900
+
+sensor:
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /
+      - type: memory_use_percent
+      - type: processor_use
+      - type: last_boot
+    scan_interval: 120
+
+automation:
+  - alias: purge_log_filesize
+    id: ''
+    trigger:
+      platform: numeric_state
+      entity_id: sensor.home_assistant_log_size
+      above: 50
+    action:
+      service: shell_command.purge_log
+
+  - alias: backup_ha_monthly
+    trigger:
+      platform: time
+      at: 04:00:00
+    condition: >
+      {{ now().day == 1 }}
+    action:
+      service: backup.create

@@ -1,0 +1,61 @@
+automation:
+  # Christmas lights - turn on
+  - alias: turn_on_switch_at_sunset
+    description: "Turn on switch at sunset sunset"
+    mode: single
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: 0
+    condition: [ ]
+    action:
+        - service: switch.turn_on
+          target:
+            entity_id: switch.smart_outdoor_plug_mss620_switch_2
+          data: { }
+
+  # Christmas tree - turn on
+  - alias: turn_on_switch_at_7
+    description: "Turn on switch at 7:00"
+    mode: single
+    trigger:
+      - platform: time
+        at: 07:00:00
+    condition: [ ]
+    action:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.shellyplug_s_7c87ceb54ffe
+        data: { }
+
+  # Christmas lights and tree - turn off
+  - alias: turn_off_switch_at_midnight
+    description: "Turn off switch at 24:00"
+    mode: single
+    trigger:
+      - platform: time
+        at: 00:00:00
+    condition: [ ]
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.smart_outdoor_plug_mss620_switch_2
+        data: { }
+      - service: switch.turn_off
+        target:
+          entity_id: switch.shellyplug_s_7c87ceb54ffe
+        data: { }
+
+  # Air purifier - turn off (after manual turn on)
+  - alias: turn_off_fan_at_midnight
+    description: "Turn off fan at 24:00"
+    mode: single
+    trigger:
+      - platform: time
+        at: 00:00:00
+    condition: [ ]
+    action:
+      - service: fan.turn_off
+        target:
+          entity_id: switch.oczyszczacz
+        data: { }

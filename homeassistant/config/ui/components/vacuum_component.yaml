@@ -1,0 +1,64 @@
+# lovelace_gen
+
+type: grid
+view_layout:
+  grid-area: swipe
+layout:
+  #default
+  margin: 0
+  grid-gap: var(--custom-layout-card-padding)
+  grid-template-columns: repeat(3, 1fr)
+  grid-template-rows: 1fr
+  grid-template-areas: |
+    "buttons  map  map"
+  mediaquery:
+    #phone
+    "(max-width: 800px)":
+      grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+      grid-template-columns: 1fr
+      grid-template-rows: repeat(2, fit-content(100%))
+      grid-template-areas: |
+        "buttons"
+        "map    "
+    #portrait
+    "(max-width: 1200px)":
+      grid-gap: var(--custom-layout-card-padding)
+      grid-template-columns: repeat(2, 1fr)
+      grid-template-rows: 1fr
+      grid-template-areas: |
+        "buttons  map"
+cards:
+  - type: horizontal-stack
+    cards:
+
+      - type: custom:button-card
+        icon: mdi:bell
+        tap_action:
+          action: call-service
+          service: vacuum.locate
+          service_data:
+            entity_id: vacuum.ijai_v3_e461_robot_cleaner
+
+      - type: custom:button-card
+        icon: mdi:home-import-outline
+        tap_action:
+          action: call-service
+          service: vacuum.return_to_base
+          service_data:
+            entity_id: vacuum.ijai_v3_e461_robot_cleaner
+
+      - type: custom:button-card
+        icon: mdi:play
+        tap_action:
+          action: call-service
+          service: vacuum.start
+          service_data:
+            entity_id: vacuum.ijai_v3_e461_robot_cleaner
+
+      - type: custom:button-card
+        icon: mdi:pause
+        tap_action:
+          action: call-service
+          service: vacuum.pause
+          service_data:
+            entity_id: vacuum.ijai_v3_e461_robot_cleaner

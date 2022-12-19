@@ -1,3 +1,9 @@
 /.idea/**
 
 *.iml
+
+.env
+
+homeassistant/config/secrets.yaml
+
+nginx/proxy.conf

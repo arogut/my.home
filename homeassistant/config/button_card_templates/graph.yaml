@@ -1,0 +1,170 @@
+graph:
+  template:
+    - settings
+    - tilt
+    - extra_styles
+  variables:
+    tilt_enable: true
+    tilt_options: >
+      [[[
+        return {
+          max: 5,
+          scale: 1.06,
+          glare: true,
+          'max-glare': 0.15,
+          perspective: 800,
+          speed: 800,
+          parallax: '0px'
+        };
+      ]]]
+  aspect_ratio: 1/1
+  show_state: false
+  show_icon: false
+  tap_action:
+    card_bounce: |
+      [[[
+        // add animation
+        if (this.getElementsByTagName("style").length === 0) {
+
+            // phone condition
+            let mq = window.matchMedia('(max-width: 800px)').matches;
+
+            let style = document.createElement('style');
+
+            style.innerHTML = `
+                @keyframes card_bounce {
+                    0%   { transform: scale(1); }
+                    10%  { transform: scale(${ mq ? '0.92' : '0.94' }); }
+                    25%  { transform: scale(1); }
+                    30%  { transform: scale(${ mq ? '0.96' : '0.98' }); }
+                    100% { transform: scale(1); }
+                }
+            `;
+
+            this.appendChild(style);
+        }
+
+        // duration
+        let duration = 800;
+
+        // animate
+        this.style.animation = `card_bounce ${duration}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+
+        // reset
+        window.setTimeout(() => { this.style.animation = "none"; }, duration + 100)
+      ]]]
+    action: toggle
+  hold_action:
+    action: block
+  styles:
+    grid:
+      - grid-template-areas: |
+          "icon   var1"
+          "icon   var2"
+          "graph  graph"
+      - grid-template-columns: repeat(2, 1fr)
+      # generates some issues on small screens ?
+      #- grid-template-rows: repeat(2, min-content) auto
+      - gap: 0%
+      - align-items: start
+      - will-change: transform
+    card:
+      - padding: 0%
+      - -webkit-tap-highlight-color: rgba(0,0,0,0)
+      - border-style: none
+      - transition: none
+      - --mdc-ripple-color:
+          '#97989c'
+      - color:
+          '#97989c'
+      - background-color:
+          rgba(115, 115, 115, 0.25)
+    var1:
+      - justify-self: end
+      - align-self: end
+      - line-height: 121%
+      - overflow: unset
+    var2:
+      - justify-self: end
+      - line-height: 115%
+      - overflow: unset
+    graph:
+      - align-self: center;
+  custom_fields:
+    var1: >
+      [[[ 
+        return `<span> ${variables.entity_one.state}</span><span id="small-label">°C</span>`; 
+      ]]]
+    var2: >
+      [[[ 
+        return `<span> ${variables.entity_two.state}</span><span id="small-label">%<span>`; 
+      ]]]
+    graph:
+      card:
+        type: custom:apexcharts-card
+        layout: minimal
+        locale: pl
+        graph_span: 8h
+        show:
+          loading: false
+        apex_config:
+          legend:
+            show: false
+          tooltip:
+            enabled: false
+          xaxis:
+            show: false
+          fill:
+            type: gradient
+            gradient:
+              type: vertical
+              opacityFrom: 0.8
+              opacityTo: 0
+              stops:
+                - 0
+                - 99
+                - 100
+          stroke:
+            width: 3
+          plotOptions:
+            area:
+              fillTo: end
+          grid:
+            padding:
+              top: -15
+        yaxis:
+          - id: var1-axis
+            show: false
+            min: ~18
+            max: ~25
+          - id: var2-axis
+            show: false
+            min: ~45
+            max: ~60
+        series:
+          - entity: >
+              [[[
+                return variables.entity_one.entity_id;
+              ]]]
+            yaxis_id: var1-axis
+            color: green
+            type: area
+            fill_raw: last
+            show:
+              legend_value: false
+            group_by:
+              func: avg
+              duration: 1h
+          - entity: >
+              [[[
+                return variables.entity_two.entity_id;
+              ]]]
+            yaxis_id: var2-axis
+            color: '#385581'
+            type: area
+            fill_raw: last
+            show:
+              legend_value: false
+            group_by:
+              func: avg
+              duration: 1h

@@ -7,6 +7,7 @@ services:
       - ./homeassistant/config:/config
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
     environment:
       - TZ=Europe/Warsaw
     healthcheck:
@@ -15,7 +16,7 @@ services:
       timeout: 60s
       retries: 3
     network_mode: host
-    restart: always
+    restart: unless-stopped
     depends_on:
       - mariadb
       - mosquitto
@@ -43,9 +44,67 @@ services:
     ports:
       - "1883:1883"
     volumes:
-      - "./mosquitto/config:/mosquitto/config"
-      - "./mosquitto/data:/mosquitto/data"
-      - "./mosquitto/log:/mosquitto/log"
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
     environment:
       - TZ=Europe/Madrid
     user: "${PUID}:${PGID}"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 500
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/conf.d/default.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    restart: always
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot:arm32v6-latest
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  omada-controller:
+    container_name: omada-controller
+    image: mbentley/omada-controller:latest
+    restart: unless-stopped
+    stop_grace_period: 60s
+    network_mode: host
+    environment:
+      - PUID=508
+      - PGID=508
+      - MANAGE_HTTP_PORT=8088
+      - MANAGE_HTTPS_PORT=8043
+      - PORTAL_HTTP_PORT=8088
+      - PORTAL_HTTPS_PORT=8843
+      - PORT_APP_DISCOVERY=27001
+      - PORT_ADOPT_V1=29812
+      - PORT_UPGRADE_V1=29813
+      - PORT_MANAGER_V1=29811
+      - PORT_MANAGER_V2=29814
+      - PORT_DISCOVERY=29810
+      - SHOW_SERVER_LOGS=true
+      - SHOW_MONGODB_LOGS=false
+      - SSL_CERT_NAME=tls.crt
+      - SSL_KEY_NAME=tls.key
+      - TZ=Europe/Warsaw
+    volumes:
+      - ./omada/data:/opt/tplink/EAPController/data
+      - ./omada/logs:/opt/tplink/EAPController/logs

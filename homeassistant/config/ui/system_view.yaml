@@ -1,0 +1,360 @@
+# lovelace_gen
+
+type: custom:grid-layout
+title: System
+layout:
+  #default
+  margin: 0
+  grid-gap: var(--custom-layout-card-padding)
+  grid-template-columns: repeat(4, 1fr) 0
+  grid-template-rows: 0 fit-content(100%) 0fr
+  grid-template-areas: |
+    "sidebar  .     .       .        ."
+    "sidebar  hass  docker  updates  ."
+    "sidebar  .     .       .        ."
+  mediaquery:
+    #phone
+    "(max-width: 800px)":
+      grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+      grid-template-columns: 0 1fr 0
+      grid-template-rows: 0 repeat(4, fit-content(100%)) 0fr
+      grid-template-areas: |
+        ".  .        ."
+        ".  sidebar  ."
+        ".  hass     ."
+        ".  docker   ."
+        ".  updates  ."
+        ".  .        ."
+    #portrait
+    "(max-width: 1200px)":
+      grid-gap: var(--custom-layout-card-padding)
+      grid-template-columns: repeat(3, 1fr) 0
+      grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
+      grid-template-areas: |
+        "sidebar  .        .       ."
+        "sidebar  hass     docker  ."
+        "sidebar  updates  .       ."
+        "sidebar  .        .       ."
+cards:
+
+  - type: custom:button-card
+    view_layout:
+      grid-area: 1 / 2 / 2 / 5
+    name: SET THEME TO "tablet" IN PROFILE
+    tap_action:
+      action: navigate
+      navigation_path: /profile
+    styles:
+      card:
+        - display: >
+            [[[
+              return hass.themes.theme === 'tablet'
+                  ? 'none'
+                  : 'initial';
+            ]]]
+      name:
+        - z-index: 1
+        - overflow: visible
+        - color: red
+        - font-weight: bolder
+        - font-size: xxx-large
+        - background: yellow
+
+  - !include
+    - components/sidebar_component.yaml
+    - option_selected: System
+
+  #################################################
+  #                                               #
+  #             SYSTEM VIEW - HASS                #
+  #                                               #
+  #################################################
+
+  - type: entities
+    view_layout:
+      grid-area: hass
+    title: Home Assistant
+    show_header_toggle: false
+    card_mod:
+      class: header-system
+    entities:
+      - entity: sensor.current_version
+        name: Wersja
+        icon: mdi:home-assistant
+
+      - entity: switch.docker_watchtower
+        name: Watchtower
+        icon: cil:docker-watchtower
+
+      - entity: sensor.template_hass_next_release
+        name: Następny release
+
+      - entity: sensor.mariadb_size
+        name: Rozmiar bazy danych
+        icon: mdi:database
+
+      - entity: sensor.home_assistant_log_size
+        name: Rozmiar logów
+        icon: mdi:file-document
+
+      - type: attribute
+        entity: sensor.docker_hass
+        attribute: uptime
+        format: relative
+        name: Działa od
+        icon: mdi:update
+
+      - type: custom:bar-card
+        width: 55%
+        height: 2em
+        decimal: 0
+        unit_of_measurement: '%'
+        style: |-
+          bar-card-name {
+            color: #97989c;
+          }
+        positions: &bar_card_positions
+          icon: outside
+          indicator: 'off'
+          name: outside
+        severity: &bar_card_severity
+          - color: '#6d2525'
+            from: 85
+            to: 999
+        entity_row: true
+        entities:
+
+          - entity: sensor.docker_hass
+            attribute: cpu_percentage
+            name: Procesor
+            icon: mdi:chip
+
+          - entity: sensor.docker_hass
+            attribute: memory_percentage
+            name: Pamięć
+            icon: mdi:memory
+
+      - type: custom:hui-element
+        card_type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            name: Hass
+            icon: mdi:reload
+            tap_action:
+              action: call-service
+              service: browser_mod.sequence
+              service_data:
+                sequence:
+                  - service: browser_mod.notification
+                    data:
+                      message: Startar om server...
+                  - service: browser_mod.delay
+                    data:
+                      time: 3000
+                  - service: homeassistant.restart
+            template: icon_name
+
+          - type: custom:button-card
+            name: Kontener
+            icon: mdi:reload
+            tap_action:
+              action: call-service
+              service: browser_mod.sequence
+              service_data:
+                sequence:
+                  - service: browser_mod.notification
+                    data:
+                      message: Startar om container...
+                  - service: homeassistant.save_persistent_states
+                  - service: browser_mod.delay
+                    data:
+                      time: 3000
+                  - service: shell_command.restart_container
+            template: icon_name
+
+  #################################################
+  #                                               #
+  #             SYSTEM VIEW - DOCKER              #
+  #                                               #
+  #################################################
+
+  - type: entities
+    view_layout:
+      grid-area: docker
+    title: Docker
+    state_color: true
+    show_header_toggle: false
+    card_mod:
+      class: header-system
+    entities:
+
+      - type: custom:bar-card
+        width: 55%
+        height: 2em
+        decimal: 0
+        unit_of_measurement: '%'
+        positions: *bar_card_positions
+        severity: *bar_card_severity
+        entity_row: true
+        style: |-
+          bar-card-name {
+            color: #97989c;
+          }
+        entities:
+
+          - entity: sensor.docker_1cpu
+            name: Procesor
+
+          - entity: sensor.docker_memory_percent
+            name: Pamięć
+
+      - entity: sensor.docker_containers_total
+        name: Wszystkie kontenery
+
+      - entity: sensor.docker_containers_running
+        name: Uruchomione kontenery
+
+      - entity: sensor.docker_containers_paused
+        name: Zapauzowane kontenery
+
+      - entity: sensor.docker_containers_stopped
+        name: Zastopowane kontenery
+
+    footer:
+      type: custom:apexcharts-card
+      layout: minimal
+      graph_span: 1h
+      locale: pl
+      apex_config:
+        chart:
+          fontFamily: var(--primary-font-family)
+          height: 135px
+        tooltip:
+          style:
+            fontSize: 14px
+          x:
+            show: true
+            format: dddd HH:mm
+        xaxis:
+          crosshairs:
+            show: false
+        legend:
+          fontSize: 14px
+          fontWeight: 400
+          itemMargin:
+            horizontal: 25
+          formatter: |
+            EVAL: (seriesName, opts) => {
+              var arr = opts.w.globals.series[opts.seriesIndex],
+                value = arr[arr.length - 1],
+                convert = (value/1024).toFixed(2);
+              return value == null
+                ? seriesName : value < 1024 ? `${Math.round(value)} %`
+                : `${convert} %`;
+            }
+          markers:
+            width: 26
+            height: 23
+            customHTML:
+              - 'EVAL:() => {return `<ha-icon icon="mdi:chip" style="--mdc-icon-size: 23px;"></ha-icon>`}'
+              - 'EVAL:() => {return `<ha-icon icon="mdi:memory" style="--mdc-icon-size: 23px;"></ha-icon>`}'
+            fillColors:
+              - none
+              - none
+          labels:
+            colors:
+              - '#97989c'
+        fill:
+          type: gradient
+          gradient:
+            type: vertical
+            opacityFrom: 0.8
+            opacityTo: 0
+            stops:
+              - 0
+              - 99
+              - 100
+        stroke:
+          width: 3
+      all_series_config:
+        type: area
+        fill_raw: last
+      series:
+        - entity: sensor.docker_cpu
+          name: CPU
+          color: green
+        - entity: sensor.docker_memory_percent
+          name: Memory
+          color: '#385581'
+
+  #################################################
+  #                                               #
+  #            SYSTEM VIEW - UPDATES              #
+  #                                               #
+  #################################################
+
+  - type: grid
+    view_layout:
+      grid-area: updates
+    columns: 1
+    square: false
+    cards:
+      - type: custom:button-card
+        entity: sensor.current_version
+        template:
+          - updates_hass
+          - tilt
+        variables:
+          available: sensor.template_updates
+          latest: sensor.docker_hub
+          latest_beta: sensor.docker_hub_beta
+          release_notes: sensor.hass_release_notes
+          release_notes_beta: sensor.hass_release_notes_beta
+
+      - type: custom:button-card
+        entity: sensor.current_version
+        name: Aktualizuj HASS
+        template:
+          - updates_hass_icon_name
+          - tilt
+        variables:
+          latest: sensor.docker_hub
+          latest_beta: sensor.docker_hub_beta
+        tap_action:
+          action: call-service
+          service: browser_mod.sequence
+          service_data:
+            sequence:
+              - service: browser_mod.notification
+                data:
+                  message: Start watchtower...
+              - service: switch.turn_on
+                data:
+                  entity_id: switch.docker_watchtower
+
+      ############################################
+
+      - type: custom:button-card
+        variables:
+          updates: sensor.template_updates
+          other_updates: sensor.template_other_updates
+          hacs_installed: sensor.hacs_installed
+        template:
+          - updates
+          - tilt
+
+      - type: custom:button-card
+        entity: sensor.template_updates
+        name: Aktualizacje
+        template:
+          - updates_icon_name
+          - tilt
+        hold_action:
+          action: call-service
+          service: browser_mod.sequence
+          service_data:
+            sequence:
+              - service: browser_mod.notification
+                data:
+                  message: Sprawdź aktualizacje...
+

@@ -1,0 +1,10 @@
+settings:
+  variables:
+    translate_unknown: Nieznany
+    translate_idle: Nieaktywny
+    translate_home: W domu
+    translate_not_home: Poza domem
+    translate_available: dostępny
+    translate_no_updates: brak aktualizacji
+    translate_update_available: dostępna aktualizacja
+    translate_updates_available: dostępne aktualizacje

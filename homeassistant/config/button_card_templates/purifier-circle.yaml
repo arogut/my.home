@@ -1,0 +1,88 @@
+purifier-circle:
+  styles:
+    card:
+      - --c-stroke-color-on: '#b0b0b0'
+      - --c-stroke-color-off: none
+      - --c-fill-color-on: none
+      - --c-fill-color-off: rgba(255,255,255,0.04)
+      - --c-stroke-width: 2.3
+      - --c-stroke-width-dragging: 4
+      - --c-font-color: '#97989c'
+      - --c-font-size: 14px
+      - --c-unit-font-size: 9.5px
+      - --c-font-weight: 700
+      - --c-letter-spacing: -0.02rem
+    custom_fields:
+      circle:
+        - display: initial
+        - width: 88%
+        - margin: -3% 2% 0 0
+        - justify-self: end
+        - opacity: 1
+  custom_fields:
+    circle: >
+      [[[
+        if (entity) {
+            let r = 22.1,
+                c = r * 2 * Math.PI,
+                tspan = '<tspan dx=".2" dy="-.4">',
+                domain = entity.entity_id.split('.')[0],
+                state = variables.state_on,
+                input = variables.circle_input || ' ',
+                unit = variables.circle_input_unit || ' ';
+      
+            let color = '#00a2ff';
+            if (input && input > 15) {
+              color = '#6a00ff';
+            } else if (input && input > 50) {
+              color = '#a800c2';
+            } else if (input && input > 100) {
+              color = '#c20000';
+            }
+
+           /* * * * * * * * * * * * * * * * * *
+            *                                 *
+            *             CIRCLE              *
+            *                                 *
+            * * * * * * * * * * * * * * * * * */
+
+            let circle = (state, input, unit) => {
+                return `
+                  <svg viewBox="0 0 50 50">
+                    <style>
+                      circle {
+                        transform: rotate(-90deg);
+                        transform-origin: 50% 50%;
+                        stroke-dasharray: ${c};
+                        stroke-dashoffset: ${c - 100 / 100 * c};
+                        stroke-width: var(--c-stroke-width);
+                        stroke: ${state ? color : 'var(--c-stroke-color-off)'};
+                        fill: ${state ? 'var(--c-fill-color-on)' : 'var(--c-fill-color-off)'};
+                      }
+                      text {
+                        font-size: var(--c-font-size);
+                        font-weight: var(--c-font-weight);
+                        letter-spacing: var(--c-letter-spacing);
+                        fill: var(--c-font-color);
+                      }
+                      tspan {
+                        font-size: var(--c-unit-font-size);
+                      }
+                      #circle_value, tspan {
+                        text-anchor: middle;
+                        dominant-baseline: central;
+                      }
+                    </style>
+                    <circle id="circle_stroke" cx="25" cy="25" r="${r}"/>
+                    <text id="circle_value" x="50%" y="52%">${input}${tspan}${unit}</tspan></text>
+                  </svg>
+
+                  ${domain === 'light' && `
+                      <input id="circle_slider" type="range" min="0" max="100" value="${input}">
+                  `}
+                `;
+            }
+
+          return circle(state, input, unit);
+        }
+      ]]]

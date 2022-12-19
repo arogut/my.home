@@ -1,0 +1,363 @@
+# lovelace_gen
+
+type: grid
+view_layout:
+  grid-area: swipe
+layout:
+  #default
+  margin: 0
+  grid-gap: var(--custom-layout-card-padding)
+  grid-template-columns: repeat(3, 1fr)
+  grid-template-rows: repeat(2, fit-content(100%))
+  grid-template-areas: |
+    "living_room  office  bedroom"
+    "media        other   home   "
+  mediaquery:
+    #phone
+    "(max-width: 800px)":
+      grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+      grid-template-columns: repeat(2, 1fr)
+      grid-template-rows: repeat(3, fit-content(100%))
+      grid-template-areas: |
+        "living_room  bedroom"
+        "office       other  "
+        "media        home   "
+    #portrait
+    "(max-width: 1200px)":
+      grid-gap: var(--custom-layout-card-padding)
+      grid-template-columns: repeat(2, 1fr)
+      grid-template-rows: repeat(3, fit-content(100%))
+      grid-template-areas: |
+        "living_room  bedroom"
+        "office       other  "
+        "media        home   "
+cards:
+
+  #################################################
+  #                                               #
+  #                  LIVING ROOM                  #
+  #                                               #
+  #################################################
+
+  - type: grid
+    title: Salon
+    view_layout:
+      grid-area: living_room
+    columns: 2
+    cards:
+
+      - type: custom:button-card
+        variables:
+          entity_one: >
+            [[[ 
+              return states['sensor.temp_rh_m_8d75_temperature'];
+            ]]]
+          entity_two: >
+            [[[ 
+              return states['sensor.temp_rh_m_8d75_humidity'];
+            ]]]
+        template:
+          - graph
+          - icon_fan2
+
+      - type: custom:button-card
+        entity: media_player.tv
+        name: TV
+        state_display: >
+          [[[
+            if (variables.state === 'playing') {
+                return 'Włączony';
+            }
+            if (variables.state === true) {
+                return variables.translate_unknown;
+            }
+          ]]]
+        hold_action:
+          !include ../../popup/tv.yaml
+        template:
+          - base
+          - icon_tv
+          - loader
+
+      - type: custom:button-card
+        entity: switch.smart_outdoor_plug_mss620_switch_1
+        name: Girlanda
+        template:
+          - light
+          - icon_hue
+
+      - type: custom:button-card
+        entity: switch.smart_outdoor_plug_mss620_switch_2
+        name: Lampki
+        template:
+          - light
+          - icon_hue
+
+
+  #################################################
+  #                                               #
+  #                    OFFICE                     #
+  #                                               #
+  #################################################
+
+  - type: grid
+    title: Biuro
+    view_layout:
+      grid-area: office
+    columns: 2
+    cards:
+
+      - type: custom:button-card
+        variables:
+          entity_one: >
+            [[[ 
+              return states['sensor.temp_rh_m_6ff1_temperature'];
+            ]]]
+          entity_two: >
+            [[[ 
+              return states['sensor.temp_rh_m_6ff1_humidity'];
+            ]]]
+        template:
+          - graph
+          - icon_fan2
+
+      - type: custom:button-card
+        entity: light.office_floor_lamp
+        name: Lampa
+        template:
+          - light
+          - icon_hue
+
+      - type: custom:button-card
+        entity: switch.office_light_one
+        name: Światło sufitowe\u00B9
+        template:
+          - light
+          - icon_spot
+
+      - type: custom:button-card
+        entity: switch.office_light_two
+        name: Światło sufitowe\u00B2
+        template:
+          - light
+          - icon_spot
+
+  #################################################
+  #                                               #
+  #                    BEDROOM                    #
+  #                                               #
+  #################################################
+
+  - type: grid
+    title: Sypialnia
+    view_layout:
+      grid-area: bedroom
+    columns: 2
+    cards:
+
+      - type: custom:button-card
+        variables:
+          entity_one: >
+            [[[ 
+              return states['sensor.temp_rh_m_75cb_temperature'];
+            ]]]
+          entity_two: >
+            [[[ 
+              return states['sensor.temp_rh_m_75cb_humidity'];
+            ]]]
+        template:
+          - graph
+          - icon_fan2
+
+      - type: custom:button-card
+        entity: fan.oczyszczacz
+        name: Oczyszczacz
+        hold_action:
+          !include ../../popup/bedroom_purifier.yaml
+        template:
+          - base
+          - icon_climate
+          - purifier-circle
+        variables:
+          circle_input: >
+            [[[
+              let pm25 = states['sensor.oczyszczacz_pm2_5'].state;
+              if (pm25) return parseInt(pm25);
+            ]]]
+
+  #################################################
+  #                                               #
+  #                     MEDIA                     #
+  #                                               #
+  #################################################
+
+  - type: grid
+    title: Media
+    view_layout:
+      grid-area: media
+    columns: 1
+    cards:
+
+      - type: custom:swipe-card
+        parameters:
+          speed: 550
+          spaceBetween: 40
+          threshold: 5
+          nested: true
+        cards:
+
+          - type: horizontal-stack
+            cards:
+
+              - type: conditional
+                conditions:
+                  - entity: select.conditional_media
+                    state_not: TV
+
+                  - entity: select.conditional_media
+                    state_not: Spotify Adrian Rogut
+
+                  - entity: select.conditional_media
+                    state_not: Biuro
+                card:
+                  type: custom:button-card
+                  entity: sensor.plex_recently_added
+                  name: Recently added
+                  tap_action:
+                    action: none
+                  template:
+                    - conditional_media
+                    - icon_plex
+
+              - type: conditional
+                conditions:
+                  - entity: select.conditional_media
+                    state: TV
+                card:
+                  type: custom:button-card
+                  entity: media_player.tv
+                  triggers_update: sensor.youtube_watching
+                  template:
+                    - conditional_media
+                    - icon_tv
+
+              - type: conditional
+                conditions:
+                  - entity: select.conditional_media
+                    state: Spotify Adrian Rogut
+                card:
+                  type: custom:button-card
+                  entity: media_player.spotify
+                  template:
+                    - conditional_media
+                    - icon_spotify
+
+              - type: conditional
+                conditions:
+                  - entity: select.conditional_media
+                    state: Biuro
+                card:
+                  type: custom:button-card
+                  entity: media_player.biuro
+                  template:
+                    - conditional_media
+                    - icon_nest_mini
+
+          - type: grid
+            columns: 2
+            cards:
+
+              - type: custom:button-card
+                entity: media_player.tv
+                triggers_update: sensor.youtube_watching
+                name: Salon
+                template:
+                  - media
+                  - icon_tv
+
+              - type: custom:button-card
+                entity: media_player.spotify
+                name: Spotify
+                template:
+                  - media
+                  - icon_spotify
+
+              - type: custom:button-card
+                entity: media_player.biuro
+                name: Nest Hub
+                template:
+                  - media
+                  - icon_nest_mini
+
+  #################################################
+  #                                               #
+  #                     INNE                      #
+  #                                               #
+  #################################################
+
+  - type: grid
+    title: Inne
+    view_layout:
+      grid-area: other
+    columns: 2
+    cards:
+
+      - type: custom:button-card
+        entity: switch.pralka
+        name: Pralka
+        template:
+          - base
+          - icon_bathroom
+
+  #################################################
+  #                                               #
+  #                     HOME                      #
+  #                                               #
+  #################################################
+
+  - type: grid
+    title: Home
+    view_layout:
+      grid-area: home
+    columns: 2
+    cards:
+
+      - type: custom:button-card
+        entity: person.adrian
+        name: Adrian
+        triggers_update:
+          - sensor.adrian_last_changed
+        hold_action:
+          !include ../../popup/home_adrian.yaml
+        variables:
+          retain: sensor.adrian_last_changed
+        template:
+          - person
+          - circle
+
+      - type: custom:button-card
+        entity: person.pati
+        name: Pati
+        triggers_update:
+          - sensor.pati_last_changed
+        hold_action:
+          !include ../../popup/home_pati.yaml
+        variables:
+          retain: sensor.pati_last_changed
+        template:
+          - person
+          - circle
+
+      - type: custom:button-card
+        entity: script.home_leave
+        name: Zamknij wszystko
+        template:
+          - base
+          - icon_away
+
+      - type: custom:button-card
+        entity: script.home_arrive
+        name: Powitanie
+        template:
+          - base
+          - icon_home

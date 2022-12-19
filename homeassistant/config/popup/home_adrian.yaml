@@ -1,0 +1,48 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: Adrian
+    card_mod:
+      style:
+        #popup header
+        .:
+    style: >
+      --popup-max-width: 400px;
+    content:
+      type: vertical-stack
+      cards:
+        - type: entities
+          card_mod:
+            class: content
+          entities:
+            - entity: person.adrian
+              secondary_info: last-changed
+
+        - type: history-graph
+          card_mod:
+            style: |
+              ha-card > div {
+                padding: 0 2em 1em 1.6em !important;
+              }
+          entities:
+            - entity: person.adrian
+
+        - type: glance
+          card_mod:
+            style: |
+              ha-card > div {
+                padding: 1em 1.5em 0.2em 1em !important;
+                box-sizing: content-box;
+              }
+          show_state: false
+          entities:
+
+            - entity: device_tracker.oneplus7pro
+              name: Router
+              icon: mdi:wifi
+              card_mod:
+                style: &state |
+                  state-badge {
+                    color: {{ is_state(config.entity, 'home') | iif('#3182b7', '#3c3f3f') }};
+                  }

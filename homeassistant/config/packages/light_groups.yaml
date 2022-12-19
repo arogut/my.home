@@ -1,0 +1,21 @@
+light:
+  - platform: group
+    name: office_group
+    entities:
+      - light.office_floor_lamp
+      - light.office_light_one
+      - light.office_light_two
+
+  - platform: group
+    name: office_ceiling
+    entities:
+      - light.office_floor_lamp
+      - light.office_light_one
+      - light.office_light_two
+
+  - platform: group
+    name: all_group
+    entities:
+      - light.office_floor_lamp
+      - light.office_light_one
+      - light.office_light_two

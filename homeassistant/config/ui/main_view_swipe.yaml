@@ -1,0 +1,97 @@
+# lovelace_gen
+
+type: custom:grid-layout
+title: Dashboard Swipe
+layout:
+  #default
+  margin: 0
+  grid-gap: var(--custom-layout-card-padding)
+  grid-template-columns: repeat(4, 1fr) 0
+  grid-template-rows: 0 1fr
+  grid-template-areas: |
+    "sidebar  .      .      .      ."
+    "sidebar  swipe  swipe  swipe  ."
+  mediaquery:
+    #phone
+    "(max-width: 800px)":
+      grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+      grid-template-columns: 0 1fr 0
+      grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
+      grid-template-areas: |
+        ".  .        ."
+        ".  sidebar  ."
+        ".  swipe    ."
+        ".  .        ."
+    #portrait
+    "(max-width: 1200px)":
+      grid-gap: var(--custom-layout-card-padding)
+      grid-template-columns: repeat(3, 1fr) 0
+      grid-template-rows: 0 fit-content(100%) 0fr
+      grid-template-areas: |
+        "sidebar  .      .      ."
+        "sidebar  swipe  swipe  ."
+        "sidebar  .      .      ."
+cards:
+
+  #extra_styles fix, do not remove
+  #also warn if theme is not set
+
+  - type: custom:button-card
+    view_layout:
+      grid-area: 1 / 2 / 2 / 5
+    name: SET THEME TO "tablet" IN PROFILE
+    tap_action:
+      action: navigate
+      navigation_path: /profile
+    styles:
+      card:
+        - display: >
+            [[[
+              return hass.themes.theme === 'tablet'
+                  ? 'none'
+                  : 'initial';
+            ]]]
+      name:
+        - z-index: 1
+        - overflow: visible
+        - color: red
+        - font-weight: bolder
+        - font-size: xxx-large
+        - background: yellow
+
+  #################################################
+  #                                               #
+  #                    SIDEBAR                    #
+  #                                               #
+  #################################################
+
+  - !include
+    - components/sidebar_component.yaml
+    - option_selected: Dashboard
+
+  #################################################
+  #                                               #
+  #                      SWIPE                    #
+  #                                               #
+  #################################################
+
+  - type: custom:swipe-card
+    view_layout:
+      grid-area: swipe
+    parameters:
+      speed: 550
+      spaceBetween: 40
+      threshold: 5
+      pagination:
+        enabled: true
+        dynamicBullets: true
+        type: 'bullets'
+      centeredSlides: true
+      slidesPerView: 'auto'
+      hashNavigation: true
+    cards:
+
+      - !include components/dashboard_component.yaml
+      #- !include components/vacuum_component.yaml
+      #- !include components/history_component.yaml
+      - !include components/system_component.yaml
