@@ -208,39 +208,41 @@ themes:
               hui-conditional-card {
                 margin: 0 0.15vh 0 0 !important;
               }
-          hui-grid-card:
+          layout-card:
             $:
-              hui-grid-card: 
+              grid-layout: 
                 .: |
                   hui-grid-card {
                     padding-bottom: 1vw;
                   }
-                $: |
-                  /* default */
-                  h1 {
-                    font-size: 2.5vw !important;
-                    line-height: 0 !important;
-                    font-weight: 600 !important;
-                    color: rgba(255, 255, 255, 0.8) !important;
-                    padding: 0.2vw 0 2vw 0 !important;
-                    letter-spacing: normal !important;
-                    width: 100%;
-                  }
-                  /* portrait */
-                  @media screen and (max-width: 1200px) {
-                    h1 {
-                      font-size: 3.3vw !important;
-                      line-height: 1.1vw !important;
-                    }
-                  }
-                  /* phone */
-                  @media screen and (max-width: 800px) {
-                    h1 {
-                      font-size: 5.5vw !important;
-                      line-height: 6vw !important;
-                      margin: 2vw 0 0 0 !important;
-                    }
-                  }
+                $:
+                  hui-grid-card:
+                    $: |
+                      /* default */
+                      h1 {
+                        font-size: 2.5vw !important;
+                        line-height: 0 !important;
+                        font-weight: 600 !important;
+                        color: rgba(255, 255, 255, 0.8) !important;
+                        padding: 0.2vw 0 2vw 0 !important;
+                        letter-spacing: normal !important;
+                        width: 100%;
+                      }
+                      /* portrait */
+                      @media screen and (max-width: 1200px) {
+                        h1 {
+                          font-size: 3.3vw !important;
+                          line-height: 1.1vw !important;
+                        }
+                      }
+                      /* phone */
+                      @media screen and (max-width: 800px) {
+                        h1 {
+                          font-size: 5.5vw !important;
+                          line-height: 6vw !important;
+                          margin: 2vw 0 0 0 !important;
+                        }
+                      }
 
 
       #################################################

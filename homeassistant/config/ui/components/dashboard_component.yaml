@@ -1,9 +1,10 @@
 # lovelace_gen
 
-type: grid
+type: custom:layout-card
+layout_type: grid
 view_layout:
   grid-area: swipe
-layout:
+layout_options:
   #default
   margin: 0
   grid-gap: var(--custom-layout-card-padding)

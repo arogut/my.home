@@ -4,11 +4,10 @@ button_card_templates:
 kiosk_mode:
   hide_header: true
 
-resources:
-  # When you regenerate, the browser cache for this file will be invalidated
-  - url: !file /local/card-mod.js
-    type: module
+#resources:
+#  # When you regenerate, the browser cache for this file will be invalidated
+#  - url: !file /local/card-mod.js
+#    type: module
 
 views:
-  - !include ui/main_view_swipe.yaml
-
+  - !include ui/main_swipe_view.yaml
