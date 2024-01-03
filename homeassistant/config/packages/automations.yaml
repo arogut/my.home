@@ -57,5 +57,5 @@ automation:
     action:
       - service: fan.turn_off
         target:
-          entity_id: switch.oczyszczacz
+          entity_id: fan.oczyszczacz
         data: { }
