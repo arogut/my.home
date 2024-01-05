@@ -80,7 +80,12 @@ cards:
       grid-area: swipe
     parameters:
       speed: 550
-      spaceBetween: 40
+      spaceBetween: 15
+      breakpoints:
+        800:
+          spaceBetween: 30
+        1200:
+          spaceBetween: 40
       threshold: 5
       pagination:
         enabled: true
