@@ -96,6 +96,7 @@ themes:
     sidebar-font-size: 1.42vw
     sidebar-line-height: 2vw
     bar-card-color: '#303435'
+    bar-card-border-radius: 0.3em
 
     #button_card_templates
     button-card-font-size: 1.35vw
@@ -288,6 +289,10 @@ themes:
         color: #97989c;
         background-color: rgba(115, 115, 115, 0.25);
       }
+      
+      .no-border {
+        border-style: none;
+      }
 
       .content .card-content {
         padding: var(--tablet-popup-content-padding);
@@ -324,7 +329,7 @@ themes:
       .type-custom-bar-card bar-card-background  {
         background: radial-gradient(circle, rgba(52, 57, 58, 0.1) 0%, rgba(17, 18, 18, 0.2) 75%);
         box-shadow: inset 0 0 25px #00000045;
-        border-radius: 0.3em;
+        border-radius: var(--bar-card-border-radius);
         overflow: hidden;
       }
 

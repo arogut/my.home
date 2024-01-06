@@ -87,6 +87,8 @@ cards:
             bar-card-name {
               color: #97989c;
             }
+          card_mod:
+            class: no-border
           positions: &bar_card_positions
             icon: outside
             indicator: 'off'
@@ -180,6 +182,8 @@ cards:
             bar-card-name {
               color: #97989c;
             }
+          card_mod:
+            class: no-border
           entities:
 
             - entity: sensor.docker_1cpu
@@ -202,6 +206,8 @@ cards:
 
       footer:
         type: custom:apexcharts-card
+        card_mod:
+          class: no-border
         layout: minimal
         graph_span: 1h
         locale: pl
