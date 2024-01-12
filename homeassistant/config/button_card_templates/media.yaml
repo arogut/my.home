@@ -5,6 +5,21 @@
 #################################################
 
 base_media:
+  template:
+    - settings
+  state_display: >
+    [[[
+      const stateDict = {
+        'on': variables.translate_on,
+        'off': variables.translate_off,
+        'playing': variables.translate_playing,
+        'paused': variables.translate_paused,
+        'standby': variables.translate_standby,
+        'idle': variables.translate_idle
+      };
+      if (variables.state === true) return variables.translate_unknown;
+      return stateDict[variables.state];
+    ]]]
   variables:
     media_on: >
       [[[ return !entity || ['playing', 'paused'].indexOf(entity.state) !== -1; ]]]
@@ -116,7 +131,19 @@ conditional_media:
       ]]]
   state_display: >
     [[[
-      console.log(entity);
+      let horizontalStack = this.getRootNode().host,
+          swipeCard = horizontalStack.getRootNode().host,
+          gridTitle = swipeCard.getRootNode().querySelector("h1");
+
+      swipeCard.swiper.on("slideChange", () => {
+          if (swipeCard.swiper.realIndex === 0) {
+              gridTitle.textContent = "Media";
+          }
+          else if (swipeCard.swiper.realIndex === 1) {
+              gridTitle.textContent = "Plays";
+          }
+      });
+
       if (entity) {
           let elt = this.shadowRoot,
               await = setTimeout(marquee, 100),
@@ -192,7 +219,7 @@ conditional_media:
       - padding: 5.75% 5.25% 0 5.75%
       - border-radius: calc(var(--button-card-border-radius) / 2)
       - background: rgba(115, 115, 115, 0.2) center center/cover no-repeat
-      - background-image: &media_background_image >
+      - background-image: >
           [[[
             if (entity) {
               if (variables.is_youtube) {
@@ -231,11 +258,10 @@ conditional_media:
         - position: absolute
         - width: 103.1%
         - height: 103.1%
-        - filter: var(--blur-intensity)
         - clip-path: >
             inset(74.5% 1.45% 1.45% 1.45% round 0 0 calc(var(--button-card-border-radius) / 2) calc(var(--button-card-border-radius) / 2))
-        - background: center center/cover no-repeat
-        - background-image: *media_background_image
+        - backdrop-filter: var(--blur-intensity)
+        - -webkit-backdrop-filter: var(--blur-intensity)
         - left: -1.5%
         - bottom: -1.6%
   custom_fields:

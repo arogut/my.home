@@ -322,13 +322,11 @@ cards:
       ############################################
 
       - type: custom:button-card
+        entity: sensor.current_version
+        template: updates
         variables:
           updates: sensor.template_updates
-          other_updates: sensor.template_other_updates
           hacs_installed: sensor.hacs_installed
-        template:
-          - updates
-          - tilt
 
       - type: custom:button-card
         entity: sensor.template_updates
@@ -336,6 +334,9 @@ cards:
         template:
           - updates_icon_name
           - tilt
+        tap_action:
+          action: navigate
+          navigation_path: /hacs/entry
         hold_action:
           action: call-service
           service: browser_mod.sequence

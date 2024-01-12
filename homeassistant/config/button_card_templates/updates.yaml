@@ -11,20 +11,11 @@ base_updates:
       - cursor: default
       - padding: 0.2em 0 0 0.6em
       - letter-spacing: var(--mdc-typography-body1-letter-spacing)
-      - -webkit-tap-highlight-color: rgba(0,0,0,0)
-      - border-style: none
-      - transition: none
-      - --mdc-ripple-color:
-          rgb(0, 0, 0)
-      - color:
-          '#97989c'
-      - background-color:
-          rgba(115, 115, 115, 0.25)
   tap_action:
     href:
   extra_styles: |
     #ripple {
-      display: none;w
+      display: none;
     }
     ha-icon {
       width: 1.4em;
@@ -126,10 +117,14 @@ updates:
       let output = '',
           updates = states[variables.updates],
           hacs_installed = states[variables.hacs_installed]?.attributes.repositories,
-          hacs_update = states['update.hacs_update.hacs_update']?.attributes.installed_version,
+          hacs_update = states['sensor.hacs']?.attributes.repositories,
           no_updates = variables.translate_no_updates,
           update_available = variables.translate_update_available,
           updates_available = variables.translate_updates_available;
+    
+      console.log(states)
+      console.log(hacs_installed);
+      console.log(hacs_update);
 
       const rename = a => {
           return a.release_url && a.release_url.indexOf('github.com') > -1
@@ -147,7 +142,7 @@ updates:
       });
 
       // subtitle
-      let count = updates?.attributes.update_entities,
+      let count = hacs_update?.length,
           subtitle = count === 0
               ? `${no_updates} <b>&larr;</b> ${hacs_update || ''}`
               : `${count} ${count === 1 ? update_available : updates_available} ${String.fromCodePoint('0x1f389')}`;

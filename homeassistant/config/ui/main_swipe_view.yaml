@@ -88,7 +88,7 @@ cards:
           spaceBetween: 40
       threshold: 5
       pagination:
-        enabled: true
+        enabled: false
         dynamicBullets: true
         type: 'bullets'
       centeredSlides: true

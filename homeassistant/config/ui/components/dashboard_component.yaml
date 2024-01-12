@@ -223,7 +223,7 @@ cards:
                 card:
                   type: custom:button-card
                   entity: sensor.plex_recently_added
-                  name: Recently added
+                  name: Ostatnio dodane
                   tap_action:
                     action: none
                   template:

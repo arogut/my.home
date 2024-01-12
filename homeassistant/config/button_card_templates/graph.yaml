@@ -69,6 +69,7 @@ graph:
       - align-items: start
       - will-change: transform
     card:
+      - border-radius: var(--button-card-border-radius)
       - padding: 0%
       - -webkit-tap-highlight-color: rgba(0,0,0,0)
       - border-style: none
@@ -136,11 +137,14 @@ graph:
           - id: var1-axis
             show: false
             min: ~18
-            max: ~25
+            max: ~26
           - id: var2-axis
             show: false
             min: ~45
             max: ~60
+        all_series_config:
+          type: area
+          fill_raw: last
         series:
           - entity: >
               [[[

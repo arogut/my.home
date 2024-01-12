@@ -45,7 +45,7 @@ lovelace:
       type: module
     - url: /hacsfiles/lovelace-hui-element/hui-element.js
       type: module
-    - url: /local/lovelace/resources/custom-icons/custom-icons.js?v=0.1.4
+    - url: /hacsfiles/custom-icons/custom-icons.js
       type: module
     # local
     - url: /local/marked.min.js?v=4.2.1
