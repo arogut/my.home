@@ -98,5 +98,5 @@ cards:
 
       - !include components/dashboard_component.yaml
       #- !include components/vacuum_component.yaml
-      #- !include components/history_component.yaml
+      - !include components/history_component.yaml
       - !include components/system_component.yaml
