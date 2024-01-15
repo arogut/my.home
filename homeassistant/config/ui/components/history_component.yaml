@@ -36,7 +36,10 @@ cards:
 
   #kwh
   - type: custom:apexcharts-card
-    graph_span: 3months
+    view_layout:
+      grid-area: chart1
+    graph_span: 1months
+    stacked: true
     apex_config:
       tooltip:
         style:
@@ -96,18 +99,205 @@ cards:
       - entity: sensor.light_one_energy
         name: Lampa 1
         color: blue
+        type: column
         group_by:
           duration: 1day
           func: delta
       - entity: sensor.2_lamp_channel_2_energy
         name: Lampa 2
         color: green
+        type: column
         group_by:
           duration: 1day
           func: delta
       - entity: sensor.pralka_energy
         name: Pralka
         color: orange
+        type: column
         group_by:
           duration: 1day
           func: delta
+
+  #temp
+  - type: custom:apexcharts-card
+    view_layout:
+      grid-area: chart2
+    graph_span: 1months
+    apex_config:
+      plotOptions:
+        bar:
+          dataLabels:
+            total:
+              enabled: true,
+              offsetX: 0,
+              style:
+                fontSize: '13px'
+                fontWeight: 900
+      tooltip:
+        style:
+          fontSize: 14px
+        x:
+          show: true
+          formatter: |
+            EVAL:(timestamp) => {
+              let date = new Date(timestamp).toLocaleString('pl-PL',{year: 'numeric', month:'long'}).toString()
+              return date.charAt(0).toUpperCase() + date.slice(1);
+            }
+      chart:
+        height: 400px
+        fontFamily: SF Pro Text
+      fill:
+        type: gradient
+        gradient:
+          type: vertical
+          shadeIntensity: 0.2
+          opacityFrom: 1
+          opacityTo: 0.7
+          stops:
+            - 0
+            - 70
+            - 100
+      grid:
+        show: true
+        borderColor: rgba(112, 135, 164, 0.1)
+      yaxis:
+        show: true
+        decimalsInFloat: 4
+        labels:
+          style:
+            colors:
+              - rgba(255, 255, 255, 0.5)
+            fontSize: 13px
+            fontWeight: 200
+          offsetX: -2
+      title:
+        text: 🌡️ Temperature
+        style:
+          color: white
+          fontSize: 38px
+          fontWeight: 700
+      xaxis:
+        tooltip:
+          enabled: false
+        crosshairs:
+          show: false
+        axisTicks:
+          show: false
+        axisBorder:
+          show: true
+          color: rgba(112, 135, 164, 0.5)
+          height: 1
+    series:
+      - entity: sensor.temp_rh_m_8d75_temperature
+        name: Salon
+        color: blue
+        type: line
+        group_by:
+          duration: 1day
+          func: avg
+      - entity: sensor.temp_rh_m_75cb_temperature
+        name: Sypialnia
+        color: green
+        type: line
+        group_by:
+          duration: 1day
+          func: avg
+      - entity: sensor.temp_rh_m_6ff1_temperature
+        name: Biuro
+        color: orange
+        type: line
+        group_by:
+          duration: 1day
+          func: avg
+
+  #humidity
+  - type: custom:apexcharts-card
+    view_layout:
+      grid-area: chart3
+    graph_span: 1months
+    apex_config:
+      plotOptions:
+        bar:
+          dataLabels:
+            total:
+              enabled: true,
+              offsetX: 0,
+              style:
+                fontSize: '13px'
+                fontWeight: 900
+      tooltip:
+        style:
+          fontSize: 14px
+        x:
+          show: true
+          formatter: |
+            EVAL:(timestamp) => {
+              let date = new Date(timestamp).toLocaleString('pl-PL',{year: 'numeric', month:'long'}).toString()
+              return date.charAt(0).toUpperCase() + date.slice(1);
+            }
+      chart:
+        height: 400px
+        fontFamily: SF Pro Text
+      fill:
+        type: gradient
+        gradient:
+          type: vertical
+          shadeIntensity: 0.2
+          opacityFrom: 1
+          opacityTo: 0.7
+          stops:
+            - 0
+            - 70
+            - 100
+      grid:
+        show: true
+        borderColor: rgba(112, 135, 164, 0.1)
+      yaxis:
+        show: true
+        decimalsInFloat: 4
+        labels:
+          style:
+            colors:
+              - rgba(255, 255, 255, 0.5)
+            fontSize: 13px
+            fontWeight: 200
+          offsetX: -2
+      title:
+        text: 💧 Humidity
+        style:
+          color: white
+          fontSize: 38px
+          fontWeight: 700
+      xaxis:
+        tooltip:
+          enabled: false
+        crosshairs:
+          show: false
+        axisTicks:
+          show: false
+        axisBorder:
+          show: true
+          color: rgba(112, 135, 164, 0.5)
+          height: 1
+    series:
+      - entity: sensor.temp_rh_m_8d75_humidity
+        name: Salon
+        color: blue
+        type: line
+        group_by:
+          duration: 1day
+          func: avg
+      - entity: sensor.temp_rh_m_75cb_humidity
+        name: Sypialnia
+        color: green
+        type: line
+        group_by:
+          duration: 1day
+          func: avg
+      - entity: sensor.temp_rh_m_6ff1_humidity
+        name: Biuro
+        color: orange
+        type: line
+        group_by:
+          duration: 1day
+          func: avg
