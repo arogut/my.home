@@ -9,7 +9,7 @@ layout_options:
   margin: 0
   grid-gap: var(--custom-layout-card-padding)
   grid-template-columns: repeat(2, 1fr)
-  grid-template-rows: repeat(2, fit-content(100%))
+  grid-template-rows: repeat(2, auto)
   grid-template-areas: |
     "chart1  chart2"
     "chart3  chart4"
@@ -18,7 +18,7 @@ layout_options:
     "(max-width: 800px)":
       grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
       grid-template-columns: 1fr
-      grid-template-rows: repeat(4, fit-content(100%))
+      grid-template-rows: repeat(4, auto)
       grid-template-areas: |
         "chart1"
         "chart2"
@@ -28,7 +28,7 @@ layout_options:
     "(max-width: 1200px)":
       grid-gap: var(--custom-layout-card-padding)
       grid-template-columns: repeat(2, 1fr)
-      grid-template-rows: repeat(2, fit-content(100%))
+      grid-template-rows: repeat(2, auto)
       grid-template-areas: |
         "chart1  chart2"
         "chart3  chart4"
@@ -70,7 +70,7 @@ cards:
         borderColor: rgba(112, 135, 164, 0.1)
       yaxis:
         show: true
-        decimalsInFloat: 4
+        decimalsInFloat: 2
         labels:
           style:
             colors:
@@ -162,7 +162,7 @@ cards:
         borderColor: rgba(112, 135, 164, 0.1)
       yaxis:
         show: true
-        decimalsInFloat: 4
+        decimalsInFloat: 1
         labels:
           style:
             colors:
@@ -254,7 +254,7 @@ cards:
         borderColor: rgba(112, 135, 164, 0.1)
       yaxis:
         show: true
-        decimalsInFloat: 4
+        decimalsInFloat: 1
         labels:
           style:
             colors:
