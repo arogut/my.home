@@ -108,3 +108,17 @@ services:
     volumes:
       - ./omada/data:/opt/tplink/EAPController/data
       - ./omada/logs:/opt/tplink/EAPController/logs
+  
+  # testing purposes 
+  ha-fusion:
+    container_name: ha-fusion
+    image: ghcr.io/matt8707/ha-fusion
+    volumes:
+      - /path/to/ha-fusion:/app/data
+    network_mode: bridge
+    ports:
+      - 5050:5050
+    environment:
+      TZ: Europe/Stockholm
+      HASS_URL: http://192.168.0.200:8123
+    restart: always
