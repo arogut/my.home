@@ -87,13 +87,6 @@ cards:
           - light
           - icon_hue
 
-      - type: custom:button-card
-        entity: switch.smart_outdoor_plug_mss620_switch_2
-        name: Lampki
-        template:
-          - light
-          - icon_hue
-
 
   #################################################
   #                                               #
