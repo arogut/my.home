@@ -1,0 +1,21 @@
+name: Main Deployment Pipeline
+
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    runs-on: [linux]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deployto Raspberry Pi
+        run: | 
+          # Pull latest changes
+          git pull origin main
+
+          # Run deployment tasks
+          ./deploy.sh
