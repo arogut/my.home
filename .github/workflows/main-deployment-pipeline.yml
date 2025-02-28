@@ -1,0 +1,28 @@
+name: Main Deployment Pipeline
+
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Raspberry Pi
+        run: | 
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
+          ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}
+
+      - name: Trigger run.sh
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          "bash ${{ secrets.REMOTE_PATH }}/scripts/restart-containers.sh"  
