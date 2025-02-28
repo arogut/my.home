@@ -5,5 +5,7 @@
 .env
 
 homeassistant/config/secrets.yaml
+homeassistant/config/www/adrian.png
+homeassistant/config/www/pati.png
 
 nginx/proxy.conf

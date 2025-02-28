@@ -1,9 +1,7 @@
 #!/bin/bash
 
-echo "Restarting running containers..."
+echo "Restarting HA container..."
 
-docker compose down
-echo "Containers stopped..."
+docker compose restart homeassistant
 
-docker compose up -d --build
-echo "Containers restarted!"
+echo "Done.

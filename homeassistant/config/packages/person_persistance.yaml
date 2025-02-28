@@ -1,19 +1,20 @@
-homeassistant:
-  customize:
-    person.matte:
-      entity_picture: /local/adrian.png
-    person.sanja:
-      entity_picture: /local/pati.png
+#homeassistant:
+#  customize:
+#    person.adrian:
+#      entity_picture: /local/adrian.png
+#    person.pati:
+#      entity_picture: /local/pati.png
 
 #person:
 #  - name: Adrian
 #    id: adrian
 #    device_trackers:
-#      - device_tracker.oneplus7pro
+#      - device_tracker.galaxy_a51_5g
 #
 #  - name: Pati
 #    id: pati
 #    device_trackers:
+#      - device_tracker.oneplus7pro
 #      - device_tracker.58_20_59_b9_83_0c
 
 mqtt:
@@ -30,7 +31,6 @@ mqtt:
 
 automation:
   - alias: person_home
-    id: '8423590985012'
     mode: parallel
     trigger:
       platform: state

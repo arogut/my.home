@@ -20,10 +20,10 @@ jobs:
 
       - name: Deploy to Raspberry Pi
         run: | 
-          rsync -avz --delete -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
+          rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
           ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}
 
-      - name: Trigger run.sh
+      - name: Trigger restart-containers.sh
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "bash ${{ secrets.REMOTE_PATH }}/scripts/restart-containers.sh"  
