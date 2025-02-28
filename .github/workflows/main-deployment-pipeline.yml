@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy to Raspberry Pi
         run: | 
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
+          rsync -avz --delete -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
           ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}
 
       - name: Trigger run.sh
