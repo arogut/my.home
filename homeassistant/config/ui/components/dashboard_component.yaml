@@ -81,7 +81,7 @@ cards:
           - loader
 
       - type: custom:button-card
-        entity: switch.smart_outdoor_plug_mss620_switch_1
+        entity: switch.smart_switch_1909021308677239089948e1e9512d88_outlet_1
         name: Girlanda
         template:
           - light
