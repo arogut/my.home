@@ -11,7 +11,7 @@ layout_options:
   grid-template-columns: repeat(3, 1fr)
   grid-template-rows: repeat(2, fit-content(100%))
   grid-template-areas: |
-    "living_room  office  bedroom"
+    "living_room  lili  bedroom"
     "media        other   home   "
   mediaquery:
     #phone
@@ -21,7 +21,7 @@ layout_options:
       grid-template-rows: repeat(3, fit-content(100%))
       grid-template-areas: |
         "living_room  bedroom"
-        "office       other  "
+        "lili       other  "
         "media        home   "
     #portrait
     "(max-width: 1200px)":
@@ -30,7 +30,7 @@ layout_options:
       grid-template-rows: repeat(3, fit-content(100%))
       grid-template-areas: |
         "living_room  bedroom"
-        "office       other  "
+        "lili       other  "
         "media        home   "
 cards:
 
@@ -90,14 +90,14 @@ cards:
 
   #################################################
   #                                               #
-  #                    OFFICE                     #
+  #                     LILI                      #
   #                                               #
   #################################################
 
   - type: grid
-    title: Biuro
+    title: Lili
     view_layout:
-      grid-area: office
+      grid-area: lili
     columns: 2
     cards:
 
