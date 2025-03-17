@@ -10,20 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Check for changes in home assistant config'
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            ha-config:
+              - 'homeassistant/config/**'
+      
       - name: Checkout code
+        if: steps.changes.outputs.ha-config == 'true' || github.event_name == 'workflow_dispatch'
         uses: actions/checkout@v4
 
       - name: Setup SSH Key
+        if: steps.changes.outputs.ha-config == 'true' || github.event_name == 'workflow_dispatch'
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy to Raspberry Pi
+        if: steps.changes.outputs.ha-config == 'true' || github.event_name == 'workflow_dispatch'
         run: | 
           rsync -avz --no-perms --no-owner --no-group -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
-          ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}
+          ./homeassistant/config ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/homeassistant/config
 
       - name: Trigger restart-containers.sh
+        if: steps.changes.outputs.ha-config == 'true' || github.event_name == 'workflow_dispatch'
         run: |
           ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "bash ${{ secrets.REMOTE_PATH }}/scripts/restart-containers.sh"  
