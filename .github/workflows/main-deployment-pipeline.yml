@@ -32,7 +32,7 @@ jobs:
         if: steps.changes.outputs.ha-config == 'true' || github.event_name == 'workflow_dispatch'
         run: | 
           rsync -avz --no-perms --no-owner --no-group -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
-          ./homeassistant/config ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/homeassistant/config
+          ./homeassistant/config ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/homeassistant/
 
       - name: Trigger restart-containers.sh
         if: steps.changes.outputs.ha-config == 'true' || github.event_name == 'workflow_dispatch'
