@@ -1,8 +1,10 @@
 name: Main Deployment Pipeline
 
 on:
-  push:
-    branches: master
+  # DISABLED due to environement modifications 
+  #
+  # push:
+  #   branches: master
   workflow_dispatch:
 
 jobs:

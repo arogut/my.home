@@ -1,13 +1,15 @@
-version: '3.2'
 services:
   homeassistant:
     container_name: hass
     image: ghcr.io/home-assistant/home-assistant:stable
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     volumes:
       - ./homeassistant/config:/config
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
-      - /run/dbus:/run/dbus:ro
+      - /var/run/dbus:/run/dbus:ro
     environment:
       - TZ=Europe/Warsaw
     healthcheck:
@@ -16,6 +18,7 @@ services:
       timeout: 60s
       retries: 3
     network_mode: host
+    privileged: true
     restart: unless-stopped
     depends_on:
       - mariadb
@@ -79,46 +82,4 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
-  omada-controller:
-    container_name: omada-controller
-    image: mbentley/omada-controller:latest
-    restart: unless-stopped
-    stop_grace_period: 60s
-    network_mode: host
-    environment:
-      - PUID=508
-      - PGID=508
-      - MANAGE_HTTP_PORT=8088
-      - MANAGE_HTTPS_PORT=8043
-      - PORTAL_HTTP_PORT=8088
-      - PORTAL_HTTPS_PORT=8843
-      - PORT_APP_DISCOVERY=27001
-      - PORT_ADOPT_V1=29812
-      - PORT_UPGRADE_V1=29813
-      - PORT_MANAGER_V1=29811
-      - PORT_MANAGER_V2=29814
-      - PORT_DISCOVERY=29810
-      - SHOW_SERVER_LOGS=true
-      - SHOW_MONGODB_LOGS=false
-      - SSL_CERT_NAME=tls.crt
-      - SSL_KEY_NAME=tls.key
-      - TZ=Europe/Warsaw
-    volumes:
-      - ./omada/data:/opt/tplink/EAPController/data
-      - ./omada/logs:/opt/tplink/EAPController/logs
-  
-  # testing purposes 
-  ha-fusion:
-    container_name: ha-fusion
-    image: ghcr.io/matt8707/ha-fusion
-    volumes:
-      - /path/to/ha-fusion:/app/data
-    network_mode: bridge
-    ports:
-      - 5050:5050
-    environment:
-      TZ: Europe/Stockholm
-      HASS_URL: http://192.168.0.200:8123
-    restart: always
+    entrypoint: "/bin/sh -c 'while :; do certbot renew; sleep 12h & wait $${!}; done;'"

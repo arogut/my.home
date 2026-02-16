@@ -22,8 +22,17 @@ template: !include sidebar.yaml
 # https://github.com/thomasloven/hass-lovelace_gen
 lovelace_gen:
 
+bluetooth:
+
 lovelace:
-  mode: yaml
+  resource_mode: yaml
+  dashboards:
+    lovelace:
+      mode: yaml
+      filename: ui-lovelace.yaml
+      title: Overview
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
   resources:
     - url: /hacsfiles/button-card/button-card.js
       type: module
@@ -90,10 +99,6 @@ sensor:
       date_string:
         friendly_name: "Full Date"
         value_template: "{{ states('sensor.day') }}, {{ states('sensor.month') }} {{ now().year }}"
-
-duckdns:
-  domain: !secret duckdns_domain
-  access_token: !secret duckdns_token
 
 http:
   use_x_forwarded_for: true
