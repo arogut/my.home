@@ -5,9 +5,9 @@ template:
           {% set recently_added = 'Ostatnio dodane' %}
           {% set paused_timeout_minutes = 15 %}
           {% set media_players = [
-            states.media_player.tv,
+            states.media_player.tv_gniazdko,
             states.media_player.biuro,
-            states.media_player.spotify ] %}
+            states.media_player.spotify_adrian_rogut ] %}
           {% macro media(state) %}
           {% set state = media_players | selectattr('state','eq',state) | list %}
           {% set last_changed = recently_added if state | length == 0 else state | map(attribute='last_changed') | list | max %}
@@ -29,9 +29,9 @@ template:
         options: >
           {% set recently_added = ['Ostatnio dodane'] %}
           {% set media_players = [
-            states.media_player.tv,
+            states.media_player.tv_gniazdko,
             states.media_player.biuro,
-            states.media_player.spotify ] %}
+            states.media_player.spotify_adrian_rogut ] %}
           {{ recently_added + media_players | map(attribute='name') | list }}
         select_option:
           service: select.select_option

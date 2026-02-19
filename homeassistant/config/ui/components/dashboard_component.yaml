@@ -62,7 +62,7 @@ cards:
           - icon_fan2
 
       - type: custom:button-card
-        entity: media_player.tv
+        entity: media_player.tv_gniazdko
         name: TV
         state_display: >
           [[[
@@ -229,7 +229,7 @@ cards:
                     state: TV
                 card:
                   type: custom:button-card
-                  entity: media_player.tv
+                  entity: media_player.tv_gniazdko
                   triggers_update: sensor.youtube_watching
                   template:
                     - conditional_media
@@ -241,7 +241,7 @@ cards:
                     state: Spotify Adrian Rogut
                 card:
                   type: custom:button-card
-                  entity: media_player.spotify
+                  entity: media_player.spotify_adrian_rogut
                   template:
                     - conditional_media
                     - icon_spotify
@@ -262,7 +262,7 @@ cards:
             cards:
 
               - type: custom:button-card
-                entity: media_player.tv
+                entity: media_player.tv_gniazdko
                 triggers_update: sensor.youtube_watching
                 name: Salon
                 template:
@@ -270,7 +270,7 @@ cards:
                   - icon_tv
 
               - type: custom:button-card
-                entity: media_player.spotify
+                entity: media_player.spotify_adrian_rogut
                 name: Spotify
                 template:
                   - media
@@ -297,7 +297,7 @@ cards:
     cards:
 
       - type: custom:button-card
-        entity: switch.pralka
+        entity: select.pralka
         name: Pralka
         template:
           - base
