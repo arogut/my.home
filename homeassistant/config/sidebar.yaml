@@ -1,5 +1,6 @@
 - sensor:
-    - unique_id: sidebar
+    - name: sidebar
+      unique_id: sidebar
       state: template
       attributes:
         time: >
@@ -40,6 +41,7 @@
           {% set entity = 'weather.forecast_dom' %}
           {% if not is_state(entity, 'unknown') %}
             {% set temp = state_attr(entity, 'temperature') | round %}
+            Odczuwalna temperatura to {{ temp }}°C
           {% else %}
             Nie można wczytać pogody...
           {% endif %}

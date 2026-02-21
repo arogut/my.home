@@ -6,7 +6,7 @@ view_layout:
 cards:
 
   - type: custom:button-card
-    entity: sensor.template_sidebar
+    entity: sensor.sidebar
     template: sidebar
 
   - type: vertical-stack

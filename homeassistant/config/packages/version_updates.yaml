@@ -20,6 +20,7 @@ rest:
 template:
   - sensor:
       - unique_id: hass_next_release
+        name: hass_next_release
         state: >
           {% set start_time = state_attr('calendar.home_assistant_devs', 'start_time') %}
           {{ (as_timestamp(start_time, default=0) + 60*60*20.5) | timestamp_local(default) }}
@@ -36,8 +37,9 @@ template:
           icon: mdi:dev-to
           device_class: timestamp
       - unique_id: updates
+        name: updates
         state: >
-          {{ this.attributes.values() | sum }}
+          {{ this.attributes.values() | select('match','^\\d+$') | map('int') | sum }}
         attributes:
           home_assistant: >
             {% set installed = states('sensor.current_version') %}
@@ -45,6 +47,68 @@ template:
             {{ iif(version(latest) > version(installed) and '.' in installed and '.' in latest, 1, 0) }}
           update_entities: >
             {{ states.update | selectattr('state','eq','on') | list | count }}
+      - name: "system_updates"
+        unique_id: system_updates
+        state: >
+          {{
+            expand(states.update)
+            | selectattr('state', 'eq', 'on')
+            | map(attribute='entity_id')
+            | list
+            | count
+            -
+            states.update
+            | selectattr('state', 'eq', 'on')
+            | selectattr('attributes.model', 'eq', 'plugin')
+            | map(attribute='entity_id')
+            | list
+            | count
+          }}
+        attributes:
+          updates: >
+            {{
+              expand(states.update)
+              | selectattr('state', 'eq', 'on')
+              | map(attribute='attributes.friendly_name')
+              | list
+            }}
+          versions: >
+            {{
+              expand(states.update)
+              | selectattr('state', 'eq', 'on')
+              | map(attribute='attributes.latest_version')
+              | list
+            }}
+
+      - name: "dashboard_updates"
+        unique_id: dashboard_updates
+        state: >
+          {{
+            states.update
+            | selectattr('state', 'eq', 'on')
+            | selectattr('attributes.model', 'eq', 'plugin')
+            | map(attribute='entity_id')
+            | list
+            | count
+          }}
+        attributes:
+          updates: >
+            {{
+              states.update
+              | selectattr('state', 'eq', 'on')
+              | selectattr('attributes.model', 'eq', 'plugin')
+              | map(attribute='attributes.friendly_name')
+              | list
+            }}
+          versions: >
+            {{
+              states.update
+              | selectattr('state', 'eq', 'on')
+              | selectattr('attributes.model', 'eq', 'plugin')
+              | map(attribute='attributes.latest_version')
+              | list
+            }}
+
 
 command_line:
   - sensor:

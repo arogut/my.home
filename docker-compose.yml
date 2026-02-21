@@ -55,7 +55,7 @@ services:
     user: "${PUID}:${PGID}"
 
   watchtower:
-    image: containrrr/watchtower
+    image: nickfedor/watchtower
     container_name: watchtower
     restart: unless-stopped
     privileged: true

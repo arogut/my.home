@@ -18,14 +18,14 @@ browser_mod:
             class: content
           entities:
 
-            - entity: media_player.tv
+            - entity: media_player.tv_gniazdko
               name: Samsung QE55QN90
               secondary_info: last-changed
 
             - entity: automation.tv_on_lights
 
             - type: custom:more-info-card
-              entity: media_player.tv
+              entity: media_player.tv_gniazdko
               card_mod:
                 style:
                   # hide everything but ha-select
@@ -64,7 +64,7 @@ browser_mod:
             type: horizontal-stack
             cards:
               - type: custom:button-card
-                entity: media_player.tv
+                entity: media_player.tv_gniazdko
                 icon: mdi:volume-mute
                 tap_action:
                   action: call-service
@@ -77,7 +77,7 @@ browser_mod:
                 template: icon_only
 
               - type: custom:button-card
-                entity: media_player.tv
+                entity: media_player.tv_gniazdko
                 icon: mdi:volume-minus
                 tap_action:
                   action: call-service
@@ -88,7 +88,7 @@ browser_mod:
                 template: icon_only
 
               - type: custom:button-card
-                entity: media_player.tv
+                entity: media_player.tv_gniazdko
                 icon: mdi:volume-plus
                 tap_action:
                   action: call-service

@@ -69,6 +69,28 @@ lovelace:
       type: css
 
 ## Converts time and date into sentence for UI
+
+template:
+- sensor:
+  - default_entity_id: sensor.day
+    state: >
+      {% set days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"] %}
+      {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} 
+      {{ days[now().weekday()] }}
+    name: day
+- sensor:
+  - default_entity_id: sensor.month
+    state: >
+      {% set months = ['Stycznia', 'Lutego', 'Marca', 'Kwietnia', 'Maja', 'Czerwca', 'Lipca', 'Sierpnia', 'Września', 'Października', 'Listopada', 'Grudnia'] %}
+      {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
+      {{ months[now().month-1] }}
+    name: month
+- sensor:
+  - default_entity_id: sensor.date_string
+    name: Full Date
+    state: >
+      {{ states('sensor.day') }}, {{ states('sensor.month') }} {{ now().year}}
+
 sensor:
   - platform: time_date
     display_options:
@@ -80,25 +102,6 @@ sensor:
       - time_date
       - time_utc
 
-  - platform: template
-    sensors:
-
-      ## Converts time and date into sentence for UI
-      day:
-        value_template: >
-          {% set days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"] %}
-          {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
-          {{ days[now().weekday()] }}
-
-      month:
-        value_template: >
-          {% set months = ['Stycznia', 'Lutego', 'Marca', 'Kwietnia', 'Maja', 'Czerwca', 'Lipca', 'Sierpnia', 'Września', 'Października', 'Listopada', 'Grudnia'] %}
-          {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
-          {{ months[now().month-1] }}
-
-      date_string:
-        friendly_name: "Full Date"
-        value_template: "{{ states('sensor.day') }}, {{ states('sensor.month') }} {{ now().year }}"
 
 http:
   use_x_forwarded_for: true

@@ -292,11 +292,9 @@ cards:
           - updates_hass
           - tilt
         variables:
-          available: sensor.template_updates
+          available: sensor.updates
           latest: sensor.docker_hub
-          latest_beta: sensor.docker_hub_beta
           release_notes: sensor.hass_release_notes
-          release_notes_beta: sensor.hass_release_notes_beta
 
       - type: custom:button-card
         entity: sensor.current_version
@@ -322,14 +320,15 @@ cards:
       ############################################
 
       - type: custom:button-card
-        entity: sensor.current_version
         template: updates
         variables:
-          updates: sensor.template_updates
+          updates: sensor.updates
           hacs_installed: sensor.hacs_installed
+          system_updates: sensor.system_updates
+          dashboard_updates: sensor.dashboard_updates
 
       - type: custom:button-card
-        entity: sensor.template_updates
+        entity: sensor.updates
         name: Aktualizacje
         template:
           - updates_icon_name

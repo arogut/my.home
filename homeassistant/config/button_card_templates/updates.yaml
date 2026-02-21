@@ -60,17 +60,11 @@ updates_hass:
           let links = new RegExp('<a href="([^"]+)"', "g"),
               installed = entity.state,
               hass_version_latest = states[variables.latest],
-              hass_version_latest_beta = states[variables.latest_beta],
-              hass_release_notes = states[variables.release_notes],
-              hass_release_notes_beta = states[variables.release_notes_beta];
+              hass_release_notes = states[variables.release_notes];
 
-          let latest = installed.includes('b')
-              ? hass_version_latest_beta.state
-              : hass_version_latest.state;
+          let latest = hass_version_latest.state;
 
-          let release_notes = installed.includes('b')
-              ? marked.parse(hass_release_notes.attributes.body)
-              : marked.parse(hass_release_notes_beta.attributes.body);
+          let release_notes = marked.parse(hass_release_notes.attributes.body);
 
           let subtitle = available === 0
               ? `${variables.translate_no_updates} <b>&larr;</b> ${installed}`
@@ -95,8 +89,7 @@ updates_hass_icon_name:
     card:
       - opacity: >
           [[[
-            return entity && (entity.state === states[variables.latest].state ||
-              entity.state === states[variables.latest_beta].state)
+            return entity && (entity.state === states[variables.latest].state)
                 ? '0.3'
                 : '1';
           ]]]
@@ -117,14 +110,11 @@ updates:
       let output = '',
           updates = states[variables.updates],
           hacs_installed = states[variables.hacs_installed]?.attributes.repositories,
-          hacs_update = states['sensor.hacs']?.attributes.repositories,
+          system_updates = states[variables.system_updates],
+          dashboard_updates = states[variables.dashboard_updates],
           no_updates = variables.translate_no_updates,
           update_available = variables.translate_update_available,
           updates_available = variables.translate_updates_available;
-    
-      console.log(states)
-      console.log(hacs_installed);
-      console.log(hacs_update);
 
       const rename = a => {
           return a.release_url && a.release_url.indexOf('github.com') > -1
@@ -142,9 +132,9 @@ updates:
       });
 
       // subtitle
-      let count = hacs_update?.length,
+      let count = (+system_updates?.state || 0) + (+dashboard_updates?.state || 0),
           subtitle = count === 0
-              ? `${no_updates} <b>&larr;</b> ${hacs_update || ''}`
+              ? `${no_updates} <b>&larr;</b>`
               : `${count} ${count === 1 ? update_available : updates_available} ${String.fromCodePoint('0x1f389')}`;
 
       return `
