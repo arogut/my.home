@@ -160,26 +160,12 @@ cards:
 
       - type: custom:navbar-card
         routes:
-          - url: /lovelace/home
-            icon_selected: mdi:home
-            icon: mdi:home-outline
-            label: Startseite
-        desktop:
-          position: left
-          show_labels: true
-          min_width: 768
-        mobile:
-          show_labels: true
-        media_player:
-          entity: media_player.spotify_adrian_rogut
-          album_cover_background: true
-        layout:
-          auto-padding:
-            enabled: true
-        styles: |
-          .image {
-            border-radius: 16px !important;
-          }
+          - url: home       # resolves relative to the current dashboard
+            icon: mdi:home
+            label: Home
+          - url: ../lights  # navigate up and into another view
+            icon: mdi:lightbulb-outline
+            label: Lights
 
   #################################################
   #                                               #

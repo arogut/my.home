@@ -1,6 +1,30 @@
-- sensor:
-    - name: sidebar
-      unique_id: sidebar
+  - sensor:
+    - default_entity_id: sensor.day
+      unique_id: day
+      state: >
+        {% set days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"] %}
+        {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} 
+        {{ days[now().weekday()] }}
+      name: day
+
+  - sensor:
+    - default_entity_id: sensor.month
+      unique_id: month
+      state: >
+        {% set months = ['Stycznia', 'Lutego', 'Marca', 'Kwietnia', 'Maja', 'Czerwca', 'Lipca', 'Sierpnia', 'Września', 'Października', 'Listopada', 'Grudnia'] %}
+        {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
+        {{ months[now().month-1] }}
+      name: month
+
+  - sensor:
+    - default_entity_id: sensor.date_string
+      unique_id: full_date
+      name: Full Date
+      state: >
+        {{ states('sensor.day') }}, {{ states('sensor.month') }} {{ now().year}}
+        
+  - sensor:
+    - unique_id: sidebar
       state: template
       attributes:
         time: >

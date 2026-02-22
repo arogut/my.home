@@ -60,7 +60,7 @@ cards:
           name: Watchtower
           icon: cil:docker-watchtower
 
-        - entity: sensor.template_hass_next_release
+        - entity: sensor.hass_next_release
           name: Następny release
 
         - entity: sensor.mariadb_size

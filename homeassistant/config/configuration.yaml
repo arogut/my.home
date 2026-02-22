@@ -17,7 +17,7 @@ recorder:
   purge_keep_days: 30
 
 frontend: !include themes.yaml
-template: !include sidebar.yaml
+template: !include template_sensors.yaml
 
 # https://github.com/thomasloven/hass-lovelace_gen
 lovelace_gen:
@@ -41,8 +41,6 @@ lovelace:
     - url: /hacsfiles/swipe-card/swipe-card.js
       type: module
     - url: /hacsfiles/kiosk-mode/kiosk-mode.js
-      type: module
-    - url: /hacsfiles/bar-card/bar-card.js
       type: module
     - url: /hacsfiles/lovelace-more-info-card/more-info-card.js
       type: module
@@ -68,29 +66,6 @@ lovelace:
     - url: /local/fonts.css?v=2.1
       type: css
 
-## Converts time and date into sentence for UI
-
-template:
-- sensor:
-  - default_entity_id: sensor.day
-    state: >
-      {% set days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"] %}
-      {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} 
-      {{ days[now().weekday()] }}
-    name: day
-- sensor:
-  - default_entity_id: sensor.month
-    state: >
-      {% set months = ['Stycznia', 'Lutego', 'Marca', 'Kwietnia', 'Maja', 'Czerwca', 'Lipca', 'Sierpnia', 'Września', 'Października', 'Listopada', 'Grudnia'] %}
-      {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
-      {{ months[now().month-1] }}
-    name: month
-- sensor:
-  - default_entity_id: sensor.date_string
-    name: Full Date
-    state: >
-      {{ states('sensor.day') }}, {{ states('sensor.month') }} {{ now().year}}
-
 sensor:
   - platform: time_date
     display_options:
@@ -101,7 +76,6 @@ sensor:
       - date_time_iso
       - time_date
       - time_utc
-
 
 http:
   use_x_forwarded_for: true
