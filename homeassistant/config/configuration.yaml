@@ -77,6 +77,16 @@ sensor:
       - time_date
       - time_utc
 
+sql:
+  db_url: !secret recorder_db_url
+  unique_id: mariadb_size
+  name: mariadb_size
+  query: >
+    SELECT table_schema "database", Round(Sum(data_length + index_length) / POWER(1024,2), 1)
+    "value" FROM information_schema.tables WHERE table_schema="ha_db" GROUP BY table_schema;
+  column: value
+  unit_of_measurement: MB
+
 http:
   use_x_forwarded_for: true
   trusted_proxies:
