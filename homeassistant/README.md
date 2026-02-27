@@ -13,3 +13,5 @@ This is just a first step to introduce a working, easy to use dashboard using Ho
 * HACS
 * lovelace_gen
 
+* If you see `NaNd` in presence card. Make sure to publish some message to MQTT
+

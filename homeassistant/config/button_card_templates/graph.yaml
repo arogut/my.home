@@ -63,8 +63,7 @@ graph:
           "icon   var2"
           "graph  graph"
       - grid-template-columns: repeat(2, 1fr)
-      # generates some issues on small screens ?
-      #- grid-template-rows: repeat(2, min-content) auto
+      - grid-template-rows: repeat(2, min-content) auto
       - gap: 0%
       - align-items: start
       - will-change: transform
@@ -80,6 +79,9 @@ graph:
           '#97989c'
       - background-color:
           rgba(115, 115, 115, 0.25)
+      - position: relative
+      - overflow: hidden
+      - box-sizing: border-box
     var1:
       - justify-self: end
       - align-self: end
@@ -90,7 +92,7 @@ graph:
       - line-height: 115%
       - overflow: unset
     graph:
-      - align-self: center;
+      - align-self: center
   custom_fields:
     var1: >
       [[[ 
@@ -98,7 +100,7 @@ graph:
       ]]]
     var2: >
       [[[ 
-        return `<span> ${variables.entity_two.state}</span><span id="small-label">%<span>`; 
+        return `<span> ${variables.entity_two.state}</span><span id="small-label">%</span>`; 
       ]]]
     graph:
       card:
@@ -109,6 +111,11 @@ graph:
         show:
           loading: false
         apex_config:
+          chart:
+            width: 90%
+            height: auto
+            redrawOnParentResize: true
+            redrawOnWindowResize: true
           legend:
             show: false
           tooltip:
@@ -123,7 +130,7 @@ graph:
               opacityTo: 0
               stops:
                 - 0
-                - 99
+                - 90
                 - 100
           stroke:
             width: 3
