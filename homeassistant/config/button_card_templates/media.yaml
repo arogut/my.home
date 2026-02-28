@@ -22,7 +22,7 @@ base_media:
     ]]]
   variables:
     media_on: >
-      [[[ return !entity || ['playing', 'paused'].indexOf(entity.state) !== -1; ]]]
+      [[[ return !entity || ['playing', 'paused', 'on'].indexOf(entity.state) !== -1; ]]]
     media_off: >
       [[[ return !entity || ['off', 'idle', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
   tap_action:
@@ -125,6 +125,7 @@ conditional_media:
     i: >
       [[[
         if (entity) {
+            console.log(entity);
             let data = entity.attributes.data;
             return data === undefined || Math.floor(Math.random() * (data.length - 1)) + 1;
         }
@@ -140,7 +141,7 @@ conditional_media:
               gridTitle.textContent = "Media";
           }
           else if (swipeCard.swiper.realIndex === 1) {
-              gridTitle.textContent = "Plays";
+              gridTitle.textContent = "Odtwarzacze";
           }
       });
 
@@ -150,6 +151,10 @@ conditional_media:
               data = entity.attributes.data,
               artist = entity.attributes.media_artist,
               title = entity.attributes.media_title;
+
+            console.log("Data: ", data);
+            console.log("Artist: ", artist);
+            console.log("Title: ", title);
 
             if (data !== undefined) {
                 var number = data[variables.i].number === undefined && data[variables.i].aired !== undefined

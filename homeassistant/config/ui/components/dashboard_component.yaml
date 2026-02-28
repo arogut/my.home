@@ -62,7 +62,7 @@ cards:
           - icon_fan2
 
       - type: custom:button-card
-        entity: media_player.tv_gniazdko
+        entity: media_player.toya_4k
         name: TV
         state_display: >
           [[[
@@ -158,15 +158,6 @@ cards:
           - graph
           - icon_fan2
 
-      - type: custom:navbar-card
-        routes:
-          - url: home       # resolves relative to the current dashboard
-            icon: mdi:home
-            label: Home
-          - url: ../lights  # navigate up and into another view
-            icon: mdi:lightbulb-outline
-            label: Lights
-
   #################################################
   #                                               #
   #                     MEDIA                     #
@@ -215,8 +206,7 @@ cards:
                     state: TV
                 card:
                   type: custom:button-card
-                  entity: media_player.tv_gniazdko
-                  triggers_update: sensor.youtube_watching
+                  entity: media_player.toya_4k
                   template:
                     - conditional_media
                     - icon_tv
@@ -237,8 +227,7 @@ cards:
             cards:
 
               - type: custom:button-card
-                entity: media_player.tv_gniazdko
-                triggers_update: sensor.youtube_watching
+                entity: media_player.toya_4k
                 name: Salon
                 template:
                   - media
