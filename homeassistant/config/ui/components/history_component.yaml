@@ -60,7 +60,7 @@ cards:
               return date.charAt(0).toUpperCase() + date.slice(1);
             }
       chart:
-        height: 400px
+        height: 400
         fontFamily: SF Pro Text
       fill:
         type: gradient
@@ -152,7 +152,7 @@ cards:
               return date.charAt(0).toUpperCase() + date.slice(1);
             }
       chart:
-        height: 400px
+        height: 400
         fontFamily: SF Pro Text
       fill:
         type: gradient

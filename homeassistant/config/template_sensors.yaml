@@ -3,7 +3,7 @@
       unique_id: day
       state: >
         {% set days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"] %}
-        {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} 
+        {{ now().day }}
         {{ days[now().weekday()] }}
       name: day
 
@@ -12,7 +12,7 @@
       unique_id: month
       state: >
         {% set months = ['Stycznia', 'Lutego', 'Marca', 'Kwietnia', 'Maja', 'Czerwca', 'Lipca', 'Sierpnia', 'Września', 'Października', 'Listopada', 'Grudnia'] %}
-        {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
+        {{ now().day }}
         {{ months[now().month-1] }}
       name: month
 
@@ -35,13 +35,11 @@
           </span>
         date: >
           <font color='#6a7377'><b>
-          {% if strptime(states('sensor.date'), '%Y-%m-%d').day != None %}
           {% set days = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'] %}
           {% set months = ['Stycznia', 'Lutego', 'Marca', 'Kwietnia', 'Maja', 'Czerwca',
           'Lipca', 'Sierpnia', 'Września', 'Października', 'Listopada', 'Grudnia'] %}
             {{ days[now().weekday()] }}<br>
-            {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} {{ months[now().month-1] }}
-          {% endif %}
+            {{ now().day }} {{ months[now().month-1] }}
           </b></font>
         greet: >
           <b>

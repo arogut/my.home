@@ -10,7 +10,6 @@ monitor_docker:
 
 automation:
   - alias: purge_log_filesize
-    id: ''
     trigger:
       platform: numeric_state
       entity_id: sensor.home_assistant_log_size
@@ -22,7 +21,8 @@ automation:
     trigger:
       platform: time
       at: 04:00:00
-    condition: >
-      {{ now().day == 1 }}
+    condition:
+      - condition: template
+        value_template: "{{ now().day == 1 }}"
     action:
       service: backup.create

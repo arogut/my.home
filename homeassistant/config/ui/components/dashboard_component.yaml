@@ -185,7 +185,7 @@ cards:
               - type: conditional
                 conditions:
                   - entity: select.conditional_media
-                    state_not: TV
+                    state_not: TOYA 4K
 
                   - entity: select.conditional_media
                     state_not: Spotify Adrian Rogut
@@ -203,7 +203,7 @@ cards:
               - type: conditional
                 conditions:
                   - entity: select.conditional_media
-                    state: TV
+                    state: TOYA 4K
                 card:
                   type: custom:button-card
                   entity: media_player.toya_4k
@@ -228,7 +228,7 @@ cards:
 
               - type: custom:button-card
                 entity: media_player.toya_4k
-                name: Salon
+                name: TV
                 template:
                   - media
                   - icon_tv
