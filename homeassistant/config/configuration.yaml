@@ -34,27 +34,27 @@ lovelace:
       icon: mdi:view-dashboard
       show_in_sidebar: true
   resources:
-    - url: /hacsfiles/button-card/button-card.js
+    - url: /local/community/button-card/button-card.js
       type: module
-    - url: /hacsfiles/lovelace-layout-card/layout-card.js
+    - url: /local/community/lovelace-layout-card/layout-card.js
       type: module
-    - url: /hacsfiles/swipe-card/swipe-card.js
+    - url: /local/community/swipe-card/swipe-card.js
       type: module
-    - url: /hacsfiles/kiosk-mode/kiosk-mode.js
+    - url: /local/community/kiosk-mode/kiosk-mode.js
       type: module
-    - url: /hacsfiles/lovelace-more-info-card/more-info-card.js
+    - url: /local/community/lovelace-more-info-card/more-info-card.js
       type: module
-    - url: /hacsfiles/apexcharts-card/apexcharts-card.js
+    - url: /local/community/apexcharts-card/apexcharts-card.js
       type: module
-    - url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
+    - url: /local/community/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
       type: module
-    - url: /hacsfiles/tabbed-card/tabbed-card.js
+    - url: /local/community/tabbed-card/tabbed-card.js
       type: module
-    - url: /hacsfiles/lovelace-mushroom/mushroom.js
+    - url: /local/community/lovelace-mushroom/mushroom.js
       type: module
-    - url: /hacsfiles/lovelace-hui-element/hui-element.js
+    - url: /local/community/lovelace-hui-element/hui-element.js
       type: module
-    - url: /hacsfiles/custom-icons/custom-icons.js
+    - url: /local/community/custom-icons/custom-icons.js
       type: module
     # local
     - url: /local/marked.min.js?v=4.2.1
@@ -80,10 +80,3 @@ sql:
     "value" FROM information_schema.tables WHERE table_schema="ha_db" GROUP BY table_schema;
   column: value
   unit_of_measurement: MB
-
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - 127.0.0.1
-    - ::1
-    - 172.16.0.0/12
