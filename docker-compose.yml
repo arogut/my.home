@@ -54,6 +54,25 @@ services:
       - TZ=Europe/Madrid
     user: "${PUID}:${PGID}"
 
+  hearth:
+    build: https://github.com/knowald/ha-hearth.git
+    container_name: ha-hearth
+    restart: unless-stopped
+    ports:
+      - "5050:5050"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      TZ: Europe/Warsaw
+      PORT: 5050
+      NODE_ENV: production
+      # hass runs with network_mode: host
+      HASS_URL: http://host.docker.internal:8123
+      # address the browser can reach (login happens there)
+      HASS_PUBLIC_URL: http://192.168.2.200:8123
+    volumes:
+      - ./hearth/data:/app/data
+
   watchtower:
     image: nickfedor/watchtower
     container_name: watchtower
