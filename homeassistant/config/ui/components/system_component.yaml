@@ -323,7 +323,6 @@ cards:
         template: updates
         variables:
           updates: sensor.updates
-          hacs_installed: sensor.hacs_installed
           system_updates: sensor.system_updates
           dashboard_updates: sensor.dashboard_updates
 

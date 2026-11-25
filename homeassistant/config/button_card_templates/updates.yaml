@@ -109,7 +109,6 @@ updates:
       // variables
       let output = '',
           updates = states[variables.updates],
-          hacs_installed = states[variables.hacs_installed]?.attributes.repositories,
           system_updates = states[variables.system_updates],
           dashboard_updates = states[variables.dashboard_updates],
           no_updates = variables.translate_no_updates,
