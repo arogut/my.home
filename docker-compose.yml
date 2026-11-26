@@ -23,6 +23,7 @@ services:
     depends_on:
       - mariadb
       - mosquitto
+      - matter-server
 
   mariadb:
     image: linuxserver/mariadb
@@ -54,6 +55,19 @@ services:
       - TZ=Europe/Madrid
     user: "${PUID}:${PGID}"
 
+  matter-server:
+    image: ghcr.io/matter-js/matterjs-server:stable
+    container_name: matter-server
+    restart: unless-stopped
+    network_mode: host
+    user: "${PUID}:${PGID}"
+    volumes:
+      - ./matter/data:/data
+    environment:
+      LOG_LEVEL: info
+    ports:
+      - "5580:5580"
+
   hearth:
     build: https://github.com/knowald/ha-hearth.git
     container_name: ha-hearth
@@ -66,9 +80,7 @@ services:
       TZ: Europe/Warsaw
       PORT: 5050
       NODE_ENV: production
-      # hass runs with network_mode: host
       HASS_URL: http://host.docker.internal:8123
-      # address the browser can reach (login happens there)
       HASS_PUBLIC_URL: http://192.168.2.200:8123
     volumes:
       - ./hearth/data:/app/data
