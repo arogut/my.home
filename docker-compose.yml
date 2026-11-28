@@ -69,7 +69,7 @@ services:
       - "5580:5580"
 
   hearth:
-    build: https://github.com/knowald/ha-hearth.git
+    image: ghcr.io/knowald/ha-hearth:latest
     container_name: ha-hearth
     restart: unless-stopped
     ports:

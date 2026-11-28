@@ -1,0 +1,163 @@
+revision: 12
+version: 5
+theme:
+  background_inner: '#1c2430'
+  background_outer: '#0d1218'
+  sheet_top: '#232b36'
+  sheet_bottom: '#14191f'
+  text_1: '#eef5f9'
+  text_2: '#dee5e9'
+  text_3: '#c3cace'
+  text_4: '#9fa6aa'
+  text_5: '#82888d'
+  text_6: '#747a80'
+  label: '#90969b'
+  icon: '#c9c9c9'
+  icon_dim: '#c9c9c9'
+  surface: '#f4f9fb'
+  line: '#f4f9fb'
+  accent: '#6fc3c9'
+  accent_deep: '#62acb1'
+  accent_bright: '#8fd0d5'
+  accent_icon: '#8fd0d5'
+  accent_text: '#b0dee1'
+  accent_dim_text: '#89ced3'
+  on_accent: '#0d1718'
+  cool: '#7f9cc9'
+  cool_light: '#acbfdc'
+  cool_icon: '#99b0d4'
+  cool_text: '#90a6c3'
+  on_cool: '#13171e'
+  media_art_top: '#28444a'
+  media_art_bottom: '#223a3f'
+  font_ui: system-ui, sans-serif
+  text_shadow: none
+day_night:
+  entity: sun.sun
+rail:
+  - id: clock
+    type: clock
+  - id: divider
+    type: spacer
+    line: true
+    height: 24
+  - id: nav
+    type: nav
+  - id: today-weather
+    type: weather
+    entity: weather.forecast_dom
+  - id: today-label
+    type: label
+    text: Today
+  - id: today-energy
+    type: energy
+    entity: sensor.suszarka_energia
+  - id: today-calendar
+    type: calendar
+    entities:
+      - calendar.swieta_w_polsce
+      - calendar.open_home_foundation_devs
+      - calendar.familijne
+  - id: spacer
+    type: spacer
+  - id: notifications
+    type: notifications
+rooms:
+  - id: home
+    name: Home
+    icon: home
+    hide_header: true
+    cards:
+      - []
+  - id: salon
+    name: Parter
+    icon: weekend
+    temp_entity: sensor.temp_rh_m_6ff1_temperature
+    humidity_entity: sensor.temp_rh_m_6ff1_humidity
+    cards:
+      - - title: Salon
+          icon: chair
+          id: header-2
+          type: header
+        - id: salon-lighting
+          type: entities
+          title: Światła
+          entities:
+            - entity: light.wled
+              name: Pasek Led
+              tap_action:
+                action: more-info
+            - entity: light.ap_ground_floor_led
+            - entity: light.piekarnik_swiatlo
+          slider_updates: continuous
+        - entities:
+            - entity: sensor.temp_rh_m_6ff1_temperature
+              name: temperatura
+              color: good
+            - entity: sensor.temp_rh_m_6ff1_humidity
+              name: wilgotność
+          id: chart
+          type: chart
+          height: 320
+        - entity: media_player.spotify_adrian_rogut
+          id: media
+          type: media
+          height: 480
+      - - title: Kuchnia
+          icon: kitchen
+          id: header
+          type: header
+        - entities:
+            - entity: sensor.piekarnik_completion_time
+            - entity: sensor.piekarnik_second_cavity_completion_time
+            - entity: binary_sensor.piekarnik_door
+            - entity: sensor.piekarnik_job_state
+            - entity: select.piekarnik_lamp
+            - entity: sensor.piekarnik_machine_state
+            - entity: sensor.piekarnik_oven_mode
+            - entity: sensor.piekarnik_second_cavity_machine_state
+            - entity: sensor.piekarnik_second_cavity_oven_mode
+            - entity: sensor.piekarnik_second_cavity_temperature
+            - entity: sensor.piekarnik_temperatura
+          show_count: false
+          slider_updates: continuous
+          id: entities-2
+          type: entities
+          title: Piekarnik
+        - entities:
+            - entity: binary_sensor.lodowka_fridge_door
+            - entity: number.lodowka_fridge_temperature
+            - entity: sensor.lodowka_fridge_temperature
+            - entity: binary_sensor.lodowka_freezer_door
+            - entity: number.lodowka_freezer_temperature
+            - entity: sensor.lodowka_freezer_temperature
+            - entity: switch.lodowka_power_freeze
+          show_count: false
+          slider_updates: continuous
+          id: entities
+          type: entities
+          title: Lodówka
+    fill_screen: true
+  - id: pok-j-lili
+    name: Pokój Lili
+    icon: child_care
+    temp_entity: sensor.temp_rh_m_8d75_temperature
+    humidity_entity: sensor.temp_rh_m_8d75_humidity
+    cards:
+      - - id: pok-j-lili-devices
+          type: entities
+          title: Devices
+          entities:
+            - entity: fan.oczyszczacz
+              name: Oczyszczacz
+            - entity: humidifier.oczyszczacz
+              name: Oczyszczacz
+screensaver_minutes: 0.5
+screensaver_brightness: 18
+screensaver_clock_size: large
+screensaver_clock_font: mono
+screensaver_weather_entity: weather.forecast_dom
+greeting:
+  persons:
+    - person.adrian
+    - person.pati
